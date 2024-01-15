@@ -1,0 +1,76 @@
+<form nz-form nzLayout="vertical" [formGroup]="filterForm">
+  <div class="row">
+    <div class="col-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input
+          type="text"
+          nz-input
+          formControlName="nome"
+          (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome do usuário"
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search"></span
+      ></ng-template>
+    </div>
+
+    <div class="col-6">
+      <div class="d-flex justify-content-end">
+        <button
+          nz-button
+          nzType="text"
+          (click)="handleCreate()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          <i nz-icon nzType="user-add"></i>
+          Novo Usuário
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<nz-card
+  class="card-table"
+  style="border-radius: 15px; overflow: hidden; margin-top: 5rem"
+>
+  <div class="mb-5">
+    <nz-table
+      #table
+      nzSize="small"
+      [nzData]="usuarios"
+      [nzLoading]="loading"
+      [nzShowPagination]="true"
+      [nzFrontPagination]="true"
+    >
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Data de Criação</th>
+          <th>Hora de Criação</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-template ngFor let-usuario [ngForOf]="table.data">
+          <tr (click)="handleEdit(usuario)">
+            <td style="margin-right: 20px">
+              {{ usuario.id }}
+            </td>
+            <td>{{ usuario.nome }}</td>
+            <td>
+              <nz-tag nzColor="success">{{
+                getCustomRoleName(usuario.tipoUsuario)
+              }}</nz-tag>
+            </td>
+            <td>{{ usuario.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ usuario.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00' }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>

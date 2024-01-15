@@ -1,0 +1,69 @@
+<div *ngIf="documents$ | async as documentPage">
+
+<div class="filtro-container">
+  <select id="filtroMes" [(ngModel)]="mesSelecionado">
+    <option *ngFor="let mes of meses" [value]="mes.valor">
+      {{ mes.nome }}
+    </option>
+  </select>
+  <select id="filtroAno" [(ngModel)]="anoSelecionado">
+    <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+  </select>
+  <button
+    style="background-color: #228765; color: white; border-radius: 30px"
+    (click)="list()"
+  >
+    Aplicar Filtro
+  </button>
+</div>
+
+<!-- <form nz-form nzLayout="vertical" [formGroup]="formFilter">
+  <div class="row">
+    <div class="col-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input type="text" nz-input formControlName="nomeProprietario" (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome do proprietário do documento" />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser><span nz-icon nzType="search"></span></ng-template>
+    </div>
+  </div>
+</form> -->
+
+<nz-card class="card-table" style="border-radius: 15px; overflow: hidden; margin-top: 5rem">
+  <div class="mb-5">
+    <nz-table #table nzSize="small" [nzData]="documentPage.documentos" [nzLoading]="loading" [nzShowPagination]="true"
+      [nzFrontPagination]="true">
+      <thead>
+        <tr>
+          <th>#</th>
+          <!-- <th>Agente de Endemias</th> -->
+          <th>Tipo</th>
+          <th>Data de Criação</th>
+          <th>Hora de Criação</th>
+          <th>Criado pelo agente</th>
+
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let documento of table.data">
+          <td (click)="handleView(documento)" style="margin-right: 20px">
+            {{ documento.id }}
+          </td>
+          <td (click)="handleView(documento)">{{ documento.tipoDeposito }}</td>
+          <td (click)="handleView(documento)">{{ documento.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+          <td (click)="handleView(documento)">{{ documento.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00'}}</td>
+          <td (click)="handleView(documento)">{{ documento.agente }}</td>
+
+          <td class="btn-delete">
+            <button (click)="deleteDocument(documento.id)" class="material-symbols-outlined">
+              delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>
+</div>

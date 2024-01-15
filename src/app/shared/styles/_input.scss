@@ -1,0 +1,55 @@
+.input-group-flush {
+  padding-left: 0;
+  border-color: transparent !important;
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none;
+}
+
+.ant-input,
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-picker,
+.ant-input-group-addon {
+  border-radius: $input-border-radius;
+}
+
+.ant-input-number {
+  border-color: $input-border-color;
+}
+
+.ant-radio-button-wrapper {
+  border-color: $input-border-color;
+
+  &:first-child {
+    border-left-color: $input-border-color;
+    border-radius: $input-border-radius 0 0 $input-border-radius;
+  }
+
+  &:last-child {
+    border-radius: 0 $input-border-radius $input-border-radius 0;
+  }
+
+  &:first-child:last-child {
+    border-radius: $input-border-radius;
+  }
+
+  &:not(:first-child)::before {
+    background-color: $input-border-color;
+  }
+}
+
+.ant-select-item-option-content {
+  white-space: normal;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  height: auto;
+}
+
+.ant-select-selection-item {
+  overflow: unset;
+  white-space: normal;
+  text-overflow: unset;
+}

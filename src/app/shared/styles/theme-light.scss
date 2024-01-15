@@ -1,0 +1,43 @@
+// Color system
+$blue:    #2c7be5;
+$indigo:  #727cf5;
+$purple:  #6b5eae;
+$pink:    #ff679b;
+$red:     #e63757;
+$orange:  #fd7e14;
+$yellow:  #f6c343;
+$green:   #00d97e;
+$teal:    #02a8b5;
+$cyan:    #39afd1;
+$dark:    #12263f;
+$dark-soft: #152e4d;
+
+$white: #fff;
+$gray-100: #f9fbfd;
+$gray-200: #edf2f9;
+$gray-300: #e3ebf6;
+$gray-400: #d2ddec;
+$gray-500: #b1c2d9;
+$gray-600: #95aac9;
+$gray-700: #6e84a3;
+$gray-800: #3b506c;
+$gray-900: #283e59;
+$black: $dark;
+$light: $gray-200;
+
+$secondary: $gray-200;
+$warning: $yellow;
+
+$body-bg: $gray-100;
+$body-color: $dark;
+
+// Border
+$border-color: $gray-300;
+
+// Nav
+$tabs-color: $gray-600;
+$tabs-tab-active-color: $gray-700;
+$tabs-tab-hover-color: $gray-800;
+
+// Input
+$input-border-color: $gray-300;

@@ -1,0 +1,523 @@
+@import "~ng-zorro-antd/ng-zorro-antd.dark.less";
+@theme: dark;
+
+// The prefix to use on all css classes from ant.
+@ant-prefix: ant;
+
+// An override for the html selector for theme prefixes
+@html-selector: html;
+
+// -------- Colors -----------
+@blue-base: #2c7be5;
+@red-base: #e63757;
+@green-base: #00d97e;
+@gold-base: #f6c343;
+@orange-base: #cfab63;
+@dark: #22223B;
+@dark-soft: #27274d;
+
+@gray-100: #f7f7fc;
+@gray-200: #ededfa;
+@gray-300: #e1e1f5;
+@gray-400: #d3d3ed;
+@gray-500: #b2b2d9;
+@gray-600: #9595c9;
+@gray-700: #6d6da3;
+@gray-800: #343463;
+@gray-900: #282859;
+
+@primary-color: @orange-6;
+@info-color: @blue-6;
+@success-color: @green-6;
+@processing-color: @blue-6;
+@error-color: @red-6;
+@highlight-color: @red-6;
+@warning-color: @gold-6;
+@normal-color: @gray-300;
+@white: #fff;
+@black: @dark;
+
+
+// Background color for `<body>`
+@body-background: @dark;
+
+// Base background color for most components
+@component-background: @dark-soft;
+
+// Border color
+// --
+@border-color-base: @gray-800; // base border outline a component
+@border-color-split: @gray-800; // split border inside a component
+@border-color-inverse: @white;
+
+// Outline
+// --
+@outline-color: @primary-color;
+
+// Popover background color
+@popover-background: @component-background;
+@popover-customize-border-color: @border-color-split;
+
+@text-color: @gray-200;
+@text-color-secondary: @gray-400;
+@text-color-inverse: @white;
+@icon-color-hover: fade(@white, 75%);
+@heading-color: @gray-100;
+
+// The background colors for active and hover states for things like
+// list items or table cells.
+@item-active-bg: @primary-1;
+@item-hover-bg: @gray-800;
+
+//
+@background-color-light: @gray-800; // background of header and selected item
+@background-color-base: @gray-800; // Default grey background color
+
+// Disabled states
+@disabled-bg: @background-color-base;
+@disabled-color: @gray-700;
+@disabled-color-dark: @gray-700;
+
+// Tree
+// ---
+@tree-bg: transparent;
+@tree-directory-selected-color: #fff;
+@tree-directory-selected-bg: @primary-color;
+@tree-node-hover-bg: @item-hover-bg;
+@tree-node-selected-bg: @primary-2;
+
+// List
+// ---
+@list-customize-card-bg: transparent;
+
+// Shadow
+@shadow-color: rgba(0, 0, 0, 0.15);
+@shadow-color-inverse: @component-background;
+@box-shadow-base: @shadow-2;
+@shadow-1-up: 0 -6px 16px -8px rgba(0, 0, 0, 0.08),
+  0 -9px 28px 0 rgba(0, 0, 0, 0.05),
+  0 -12px 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-down: 0 6px 16px -8px rgba(0, 0, 0, 0.08),
+  0 9px 28px 0 rgba(0, 0, 0, 0.05),
+  0 12px 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-left: -6px 0 16px -8px rgba(0, 0, 0, 0.08),
+  -9px 0 28px 0 rgba(0, 0, 0, 0.05),
+  -12px 0 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-right: 6px 0 16px -8px rgba(0, 0, 0, 0.08),
+  9px 0 28px 0 rgba(0, 0, 0, 0.05),
+  12px 0 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-2: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+  0 6px 16px 0 rgba(0, 0, 0, 0.08),
+  0 9px 28px 8px rgba(0, 0, 0, 0.1);
+
+// Buttons
+// ---
+@btn-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+@btn-primary-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+@btn-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+
+@btn-default-ghost-color: @text-color;
+@btn-default-ghost-border: fade(@white, 25%);
+
+@btn-text-hover-bg: transparent;
+
+@btn-primary-color: #fff;
+@btn-primary-bg: @primary-color;
+
+@btn-default-color: @text-color;
+@btn-default-bg: transparent;
+@btn-default-border: @border-color-base;
+
+@btn-danger-color: #fff;
+@btn-danger-bg: @error-color;
+@btn-danger-border: @error-color;
+
+@btn-disable-color: @disabled-color;
+@btn-disable-bg: @disabled-bg;
+@btn-disable-border: @border-color-base;
+
+@btn-default-ghost-color: @component-background;
+@btn-default-ghost-bg: transparent;
+@btn-default-ghost-border: @component-background;
+
+@btn-group-border: @primary-5;
+
+@btn-link-ghost-color: @component-background;
+
+
+// Checkbox
+// ---
+@checkbox-check-bg: transparent;
+@checkbox-color: @primary-color;
+@checkbox-check-color: #fff;
+
+// Descriptions
+// ---
+@descriptions-bg: @background-color-light;
+
+// Divider
+// ---
+@divider-color: @border-color-base;
+
+// Modal
+// ---
+@modal-header-bg: @popover-background;
+@modal-header-border-color-split: @border-color-split;
+@modal-heading-color: @heading-color;
+@modal-content-bg: @popover-background;
+@modal-footer-bg: transparent;
+@modal-footer-border-color-split: @border-color-split;
+@modal-mask-bg: fade(@black, 45%);
+
+// Radio
+// ---
+@radio-dot-color: @primary-color;
+@radio-solid-checked-color: @white;
+@radio-dot-disabled-color: fade(@white, 20%);
+
+// Radio buttons
+// ---
+@radio-button-bg: @btn-default-bg;
+@radio-button-checked-bg: @btn-default-bg;
+@radio-button-color: @btn-default-color;
+@radio-button-hover-color: @primary-5;
+@radio-button-active-color: @primary-7;
+@radio-disabled-button-checked-bg: fade(@white, 20%);
+@radio-disabled-button-checked-color: @disabled-color;
+
+// Layout
+// ---
+@layout-body-background: @body-background;
+@layout-header-background: @dark-soft;
+@layout-header-color: @text-color;
+@layout-footer-background: @layout-body-background;
+@layout-sider-background: @layout-header-background;
+@layout-trigger-background: @gray-800;
+@layout-trigger-color: @gray-200;
+
+// Layout light theme
+@layout-sider-background-light: #fff;
+@layout-trigger-background-light: #fff;
+@layout-trigger-color-light: @text-color;
+
+// Input
+// ---
+@input-bg: transparent;
+@input-color: @text-color;
+@input-border-color: @gray-600;
+@input-placeholder-color: @gray-700;
+@input-hover-border-color: @primary-5;
+@input-disabled-bg: @disabled-bg;
+@input-addon-bg: transparent;
+
+// Input Number
+@input-number-hover-border-color: @input-hover-border-color;
+@input-number-handler-active-bg: @item-hover-bg;
+@input-number-handler-hover-bg: @primary-5;
+@input-number-handler-bg: @component-background;
+@input-number-handler-border-color: @input-border-color;
+
+// Input Icon
+@input-icon-color: @input-color;
+@input-icon-hover-color: fade(@white, 85%);
+
+// Select
+// ---
+@select-background: transparent;
+@select-border-color: @input-border-color;
+@select-dropdown-bg: @popover-background;
+@select-clear-background: @component-background;
+@select-item-selected-bg: @primary-1;
+@select-item-active-bg: @item-hover-bg;
+@select-selection-item-bg: fade(@white, 8);
+@select-selection-item-border-color: @border-color-split;
+@select-multiple-disabled-background: @component-background;
+@select-multiple-item-disabled-color: #595959;
+@select-multiple-item-disabled-border-color: @popover-background;
+
+// Cascader
+// ---
+@cascader-bg: transparent;
+@cascader-item-selected-bg: @primary-1;
+@cascader-menu-bg: @popover-background;
+@cascader-menu-border-color-split: @border-color-split;
+
+// Tooltip
+// ---
+// Tooltip background color
+@tooltip-bg: rgba(0, 0, 0, 0.75);
+@tooltip-color: #fff;
+@tooltip-arrow-color: @tooltip-bg;
+
+// Menu
+// ---
+@menu-bg: @component-background;
+@menu-popup-bg: @component-background;
+@menu-item-color: @text-color;
+@menu-highlight-color: @primary-color;
+@menu-item-active-bg: @primary-1;
+@menu-item-group-title-color: @text-color-secondary;
+
+// dark theme
+@menu-dark-color: @text-color-secondary-dark;
+@menu-dark-bg: @layout-header-background;
+@menu-dark-arrow-color: #fff;
+@menu-dark-submenu-bg: transparent;
+@menu-dark-highlight-color: #fff;
+@menu-dark-item-active-bg: @primary-color;
+@menu-dark-selected-item-icon-color: @white;
+@menu-dark-selected-item-text-color: @white;
+@menu-dark-item-hover-bg: transparent;
+
+// Message
+// ---
+@message-notice-content-bg: @popover-background;
+
+// Notification
+// ---
+@notification-bg: @popover-background;
+
+// Link
+// ---
+@link-color: @primary-color;
+@link-hover-color: @primary-5;
+@link-active-color: @primary-7;
+
+// Table
+// --
+@table-bg: @component-background;
+@table-header-bg: @gray-800;
+@table-header-bg-sm: @table-header-bg;
+@table-header-color: @gray-600;
+@table-header-sort-bg: @background-color-base;
+@table-header-sort-active-bg: darken(@table-header-bg, 3%);
+@table-header-filter-active-bg: darken(@table-header-sort-active-bg, 5%);
+@table-body-sort-bg: fade(@white, 1%);
+@table-body-selected-sort-bg: @table-selected-row-bg;
+@table-row-hover-bg: none;
+@table-filter-btns-bg: @popover-background;
+@table-filter-dropdown-bg: @popover-background;
+@table-expanded-row-bg: @table-header-bg;
+@table-expand-icon-bg: transparent;
+@table-footer-bg: @background-color-light;
+@table-footer-color: @heading-color;
+@table-selected-row-color: inherit;
+@table-selected-row-bg: @primary-1;
+@table-selected-row-hover-bg: @table-selected-row-bg;
+
+// TimePicker
+// ---
+@picker-bg: transparent;
+@picker-border-color: @border-color-split;
+@picker-basic-cell-hover-color: @item-hover-bg;
+@picker-basic-cell-hover-with-range-color: darken(@primary-color, 35%);
+@picker-basic-cell-active-with-range-color: @primary-1;
+@picker-basic-cell-disabled-bg: @disabled-bg;
+@picker-date-hover-range-color: @picker-basic-cell-hover-with-range-color;
+@picker-date-hover-range-border-color: darken(@primary-color, 20%);
+
+// Dropdown
+// ---
+@dropdown-menu-bg: @popover-background;
+@dropdown-menu-submenu-disabled-bg: transparent;
+@dropdown-selected-color: @primary-color;
+
+// Steps
+// ---
+@steps-background: transparent;
+@steps-nav-arrow-color: fade(@white, 20%);
+@process-tail-color: @border-color-split;
+
+// Avatar
+// ---
+@avatar-bg: @gray-700;
+@avatar-color: @text-color;
+
+// Progress
+// ---
+@progress-steps-item-bg: fade(@white, 8%);
+@progress-default-color: @primary-color;
+@progress-remaining-color: @background-color-base;
+@progress-text-color: @text-color;
+
+// Calendar
+// ---
+@calendar-bg: @popover-background;
+@calendar-input-bg: @calendar-bg;
+@calendar-border-color: transparent;
+@calendar-full-bg: @component-background;
+@calendar-item-active-bg: @item-active-bg;
+@calendar-full-panel-bg: @calendar-full-bg;
+
+// Badge
+// ---
+@badge-text-color: @text-color;
+
+// Popover
+// ---
+@popover-bg: @popover-background;
+@popover-color: @text-color;
+@popover-arrow-color: @popover-bg;
+@popover-arrow-outer-color: @popover-bg;
+
+// Drawer
+// ---
+@drawer-bg: @component-background;
+
+// Card
+// ---
+@card-background: @component-background;
+@card-head-color: @heading-color;
+@card-head-background: transparent;
+@card-actions-background: @component-background;
+@card-skeleton-bg: @gray-700;
+@card-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.64),
+  0 3px 6px 0 rgba(0, 0, 0, 0.48),
+  0 5px 12px 4px rgba(0, 0, 0, 0.36);
+
+// Transfer
+// ---
+@transfer-item-hover-bg: @item-hover-bg;
+@transfer-disabled-bg: @disabled-bg;
+
+// Comment
+// ---
+@comment-bg: transparent;
+@comment-author-time-color: fade(@white, 30%);
+@comment-author-name-color: @text-color-secondary;
+@comment-action-hover-color: fade(@white, 65%);
+@comment-action-color: @text-color-secondary;
+
+// Rate
+// ---
+@rate-star-bg: @border-color-split;
+@rate-star-color: @yellow-6;
+
+// Switch
+// ---
+@switch-bg: @white;
+@switch-color: @primary-color;
+@switch-shadow-color: fade(#00230b, 20%);
+
+// Pagination
+// ---
+@pagination-item-bg: transparent;
+@pagination-item-bg-active: transparent;
+@pagination-item-link-bg: transparent;
+@pagination-item-disabled-bg-active: fade(@white, 25%);
+@pagination-item-disabled-color-active: @black;
+@pagination-item-input-bg: @pagination-item-bg;
+
+// PageHeader
+// ---
+@page-header-back-color: @icon-color;
+@page-header-ghost-bg: transparent;
+
+// Slider
+// ---
+@slider-rail-background-color: @background-color-base;
+@slider-rail-background-color-hover: @border-color-base;
+@slider-track-background-color: @primary-3;
+@slider-track-background-color-hover: @primary-4;
+@slider-handle-background-color: @component-background;
+@slider-handle-color: @primary-3;
+@slider-handle-color-hover: @primary-4;
+@slider-handle-color-focus: tint(@primary-color, 20%);
+@slider-handle-color-focus-shadow: fade(@primary-color, 12%);
+@slider-handle-color-tooltip-open: @primary-color;
+@slider-handle-shadow: 0;
+@slider-dot-border-color: @border-color-split;
+@slider-dot-border-color-active: tint(@primary-color, 50%);
+@slider-disabled-color: @disabled-color;
+@slider-disabled-background-color: @component-background;
+
+// Skeleton
+// ---
+@skeleton-color: @gray-700;
+@skeleton-to-color: shade(@skeleton-color, 5%);
+
+// Alert
+// ---
+@alert-success-border-color: @green-3;
+@alert-success-bg-color: @green-1;
+@alert-success-icon-color: @success-color;
+@alert-info-border-color: @primary-3;
+@alert-info-bg-color: @primary-1;
+@alert-info-icon-color: @info-color;
+@alert-warning-border-color: @gold-3;
+@alert-warning-bg-color: @gold-1;
+@alert-warning-icon-color: @warning-color;
+@alert-error-border-color: @red-3;
+@alert-error-bg-color: @red-1;
+@alert-error-icon-color: @error-color;
+@alert-message-color: @heading-color;
+@alert-text-color: @text-color;
+@alert-close-color: @text-color-secondary;
+@alert-close-hover-color: @icon-color-hover;
+
+// Timeline
+// ---
+@timeline-color: @border-color-split;
+@timeline-dot-color: @primary-color;
+@timeline-dot-bg: @component-background;
+
+// Mentions
+// ---
+@mentions-dropdown-bg: @component-background;
+@mentions-dropdown-menu-item-hover-bg: @mentions-dropdown-bg;
+
+// Upload
+// ---
+@upload-actions-color: @text-color-secondary;
+
+// Tag
+// --
+@tag-default-bg: @background-color-light;
+@tag-default-color: @text-color;
+
+// Collapse
+// ---
+@collapse-header-bg: @background-color-light;
+@collapse-content-bg: @component-background;
+
+// List
+// ---
+@list-header-background: transparent;
+@list-footer-background: transparent;
+@list-customize-card-bg: @component-background;
+
+// BackTop
+// ---
+@back-top-color: #fff;
+@back-top-bg: @text-color-secondary;
+@back-top-hover-bg: @text-color;
+
+// Breadcrumb
+// ---
+@breadcrumb-base-color: @text-color-secondary;
+@breadcrumb-last-item-color: @text-color;
+@breadcrumb-link-color: @text-color-secondary;
+@breadcrumb-link-color-hover: @primary-5;
+@breadcrumb-separator-color: @text-color-secondary;
+
+// Tabs
+// ---
+@tabs-card-head-background: @background-color-light;
+@tabs-card-active-color: @primary-color;
+@tabs-ink-bar-color: @primary-color;
+@tabs-highlight-color: @primary-color;
+@tabs-hover-color: @primary-5;
+@tabs-active-color: @primary-7;
+
+// Form
+// ---
+@label-required-color: @highlight-color;
+@label-color: @heading-color;
+@form-warning-input-bg: @input-bg;
+@form-error-input-bg: @input-bg;
+
+// Anchor
+// ---
+@anchor-bg: @component-background;
+@anchor-border-color: @border-color-split;
+

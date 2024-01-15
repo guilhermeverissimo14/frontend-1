@@ -1,0 +1,216 @@
+<div class="row mt-2 mb-5">
+  <div
+    class="col-md-12 col-lg-12 d-flex justify-content-start align-items-center"
+  >
+    <span
+      class="d-inline-block align-middle"
+      style="cursor: pointer"
+      nz-icon
+      (click)="goBack()"
+      nzType="arrow-left"
+      nzTheme="outline"
+    ></span>
+    <h3 class="d-inline-block align-middle ml-2 mt-2">
+      {{ isCreating ? "Novo cadastro" : "Editar cadastro" }}
+    </h3>
+  </div>
+</div>
+
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="form"
+  (ngSubmit)="handleSubmit()"
+>
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Tipo de Usuário</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            [nzOptions]="tiposUsuario"
+            formControlName="tipoUsuario"
+          ></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Nome</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="nome"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>E-mail</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            form.get('email').hasError('email') ? 'E-mail inválido!' : null
+          "
+        >
+          <input
+            type="text"
+            formControlName="email"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>CPF</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            cpfControl.hasError('minlength') ? 'Informe 11 dígitos!' : null
+          "
+        >
+          <input
+            type="text"
+            formControlName="cpf"
+            cpfMask
+            (keydown)="handleCpfMaxDigits($event)"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isCreating">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Senha</nz-form-label>
+        <nz-form-control>
+          <input
+            type="password"
+            formControlName="senha"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Confirmar Senha</nz-form-label>
+        <nz-form-control>
+          <input
+            type="password"
+            formControlName="confirmPassword"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isAgenteEndemias || isAdmMunicipal">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Estado</nz-form-label>
+        <nz-form-control>
+          <input
+            formControlName="estado"
+            type="text"
+            minlength="1"
+            maxlength="255"
+            nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Cidade</nz-form-label>
+        <nz-form-control>
+          <input
+            formControlName="cidade"
+            type="text"
+            minlength="1"
+            maxlength="255"
+            nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6" *ngIf="isAgenteEndemias || isAdmMunicipal">
+      <nz-form-item>
+        <nz-form-label>Região Geográfica</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="regiaoGeografica"
+            nzShowSearch
+            nzAllowClear
+            [nzOptions]="regiaoGeograficaOptions"
+          ></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6" *ngIf="isAgenteEndemias || isAdmMunicipal">
+      <nz-form-item>
+        <nz-form-label>Vistorias a Fazer</nz-form-label>
+        <nz-form-control>
+          <input
+            type="number"
+            formControlName="quantidadeDocumentosAFazer"
+            minlength="0"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6" *ngIf="isProfissionalUbs">
+      <nz-form-item>
+        <nz-form-label>UBS</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="ubs"
+            nzShowSearch
+            nzAllowClear
+          >
+          <nz-option *ngFor="let ubs of ubsOptions" [nzLabel]="ubs.label" [nzValue]="ubs.value"></nz-option>
+        </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row mt-2 mb-4 d-flex justify-content-center">
+    <div
+      class="col-md-12 col-lg-4 d-flex justify-content-center align-items-center"
+    >
+      <button
+        nz-button
+        class="btn-unicasu-primary w-100"
+        nzBlock
+        nzSize="large"
+      >
+        Salvar
+      </button>
+    </div>
+  </div>
+</form>

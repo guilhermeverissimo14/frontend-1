@@ -1,0 +1,43 @@
+// Color system
+$blue:    #2c7be5;
+$indigo:  #727cf5;
+$purple:  #6b5eae;
+$pink:    #ff679b;
+$red:     #e63757;
+$orange:  #cfab63;
+$yellow:  #f6c343;
+$green:   #00d97e;
+$teal:    #02a8b5;
+$cyan:    #39afd1;
+$dark:    #22223B;
+$dark-soft: #27274d;
+
+$white: #fff;
+$gray-100: #f7f7fc;
+$gray-200: #ededfa;
+$gray-300: #e1e1f5;
+$gray-400: #d3d3ed;
+$gray-500: #b2b2d9;
+$gray-600: #9595c9;
+$gray-700: #6d6da3;
+$gray-800: #343463;
+$gray-900: #282859;
+$black: $dark;
+
+// Button themes
+$primary: $orange;
+$secondary: $gray-800;
+
+$body-bg: $dark;
+$body-color: $gray-200;
+
+// Border
+$border-color: $gray-800;
+
+// Nav
+$tabs-color: $gray-600;
+$tabs-tab-active-color: $white;
+$tabs-tab-hover-color: $gray-700;
+
+// Input
+$input-border-color: $gray-600;

@@ -1,0 +1,40 @@
+<div class="filtro-container">
+  <select id="filtroMes" [(ngModel)]="mesSelecionado">
+    <option *ngFor="let mes of meses" [value]="mes.valor">
+      {{ mes.nome }}
+    </option>
+  </select>
+  <select id="filtroAno" [(ngModel)]="anoSelecionado">
+    <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+  </select>
+  <button style="background-color: #228765; color: white; border-radius: 30px" (click)="listConsumo()">
+    Aplicar Filtro
+  </button>
+</div>
+<nz-card class="card-table" style="border-radius: 15px; overflow: hidden; margin-top: 5rem">
+
+  <div class="mb-5">
+    <nz-table nzSize="small" [nzData]="usuarios" [nzShowPagination]="true" [nzFrontPagination]="true">
+
+      <thead >
+        <tr>
+          <th>Agente de Endemias</th>
+          <th>Quantitativo de produto consumido</th>
+        </tr>
+      </thead>
+
+      <tbody *ngIf="usuarios && usuarios.length > 0; else noData">
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.somaQuantidadeLarvicida }}</td>
+        </tr>
+      </tbody>
+
+      <ng-template #noData>
+        <tr>
+          <td colspan="2">Nenhum dado disponível</td>
+        </tr>
+      </ng-template>
+    </nz-table>
+  </div>
+</nz-card>

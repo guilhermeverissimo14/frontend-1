@@ -1,0 +1,324 @@
+<form nz-form nzLayout="vertical" >
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="d-flex justify-content-end">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-date-picker
+              nzFormat="dd/MM/yyyy"
+              [nzDisabledDate]="disabledDate"
+            >
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <button
+          nz-button
+          nzBlock
+          type="button"
+          [nzLoading]="downloading"
+          class="ml-2 w-25"
+          (click)="handleDownload()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="filtro-container">
+  <select id="filtroMes" [(ngModel)]="mesSelecionado">
+    <option *ngFor="let mes of meses" [value]="mes.valor">
+      {{ mes.nome }}
+    </option>
+  </select>
+  <select id="filtroAno" [(ngModel)]="anoSelecionado">
+    <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+  </select>
+  <button
+    style="background-color: #228765; color: white; border-radius: 30px"
+    (click)="refreshDocument()"
+  >
+    Aplicar Filtro
+  </button>
+</div>
+
+<div class="row" #container>
+  <div class="col-md-12 col-lg-12">
+    <nz-divider nzText="Mapa Municipal"></nz-divider>
+    <div #map style="height: 400px"></div>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Notificações da Cidade"></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        #table
+        nzSize="small"
+        [nzData]="dadosPacientes"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 20%">UBS</th>
+            <th>Notificados</th>
+            <th>Casos positivos</th>
+            <th>Casos estrangeiros</th>
+            <th>Casos suspeitos</th>
+            <th>Internados</th>
+            <th>Óbitos</th>
+            <th>Óbitos suspeitos</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+          *ngFor="let relatorio of dadosPacientes"
+          [class]="getPatientColorClass(relatorio.somaCasosPositivos / relatorio.notificados * 100)"
+          >
+            <td>{{ relatorio.ubsNome }}</td>
+            <td>{{ relatorio.notificados }}</td>
+            <td>{{ relatorio.somaCasosPositivos }}</td>
+            <td>{{ relatorio.somaCasosEstrangeiros }}</td>
+            <td>{{ relatorio.somaCasosSuspeitos }}</td>
+            <td>{{ relatorio.internados }}</td>
+            <td>{{ relatorio.somaObitos }}</td>
+            <td>{{ relatorio.somaObitosSuspeitos }}</td>
+          </tr>
+        </tbody>
+        <tfoot class="background-footer">
+          <tr>
+            <td colspan="1">Totais:</td>
+            <td>{{ totalNotificados }}</td>
+            <td>{{ totalSomaCasosPositivos }}</td>
+            <td>{{ totalSomaCasosEstrangeiros }}</td>
+            <td>{{ totalSomaCasosSuspeitos }}</td>
+            <td>{{ totalInternados }}</td>
+            <td>{{ totalSomaObitos }}</td>
+            <td>{{ totalSomaObitosSuspeitos }}</td>
+          </tr>
+        </tfoot>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <!-- <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Classificação dos Setores (Risco de Transmissão de Dengue, Zika e Chikungunya)"
+    ></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzLoading]="loading"
+        [nzData]="['']"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 40%">Risco</th>
+            <th>Nº Setores</th>
+            <th>%</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let indice of dadosPacientes">
+            <td>
+              <ng-container *ngIf="indice.risco !== null; else baixoRisco">
+                <nz-tag nzColor="success" *ngIf="indice.risco == 'BAIXO'">
+                  Baixo risco (menor que 0,9)
+                </nz-tag>
+                <nz-tag nzColor="gold" *ngIf="indice.risco == 'MEDIO'">
+                  Médio risco (entre 1,0 e 3,9)
+                </nz-tag>
+                <nz-tag nzColor="red" *ngIf="indice.risco == 'ALTO'">
+                  Alto risco (acima de 3,9)
+                </nz-tag>
+              </ng-container>
+              <ng-template #baixoRisco>
+                <nz-tag nzColor="success"> Baixo risco (menor que 0,9) </nz-tag>
+              </ng-template>
+            </td>
+            <td>{{ indice.ubs?.nome }}</td>
+            <td>{{ indice.somaPacientePositivo }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Total</nz-tag>
+            </td>
+            <td>{{ dadosPacientes?.length }}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div> -->
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Número de Depósitos Inspecionados (Tipos de Depósitos)"
+    ></nz-divider>
+    <nz-card
+      class="card-table d-flex justify-content-center"
+      style="border-radius: 15px; overflow: hidden"
+    >
+      <br />
+      <ngx-charts-bar-vertical
+        *ngIf="graphVisible"
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+      >
+      </ngx-charts-bar-vertical>
+
+      <div class="legend-column legend-container">
+        <div class="legend-item">
+          <span class="legend-key">A1:</span> Armazenamento de Água (Elevado);
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">A2:</span> Armazenamento de Água (Nível do Solo);
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">B:</span> Pequenos recipientes móveis;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">C:</span> Recipientes fixos;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">D1:</span> Pneus;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">D2:</span> Lixo e Sucata;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">E:</span> Recipientes naturais;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">TSPL:</span> Total de imóveis sem a presença de larva;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">TISA:</span> Total de imóveis sem acesso;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">TVZ:</span> Total de vistorias por zona;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">TCPL:</span> Total de imóveis com a presença de larva;
+        </div>
+        <div class="legend-item">
+          <span class="legend-key">IFP:</span> Índice de Infestação Predial;
+        </div>
+      </div>
+      <div class=" legend-column legend-container">
+        <table class="legend-table">
+          <tr class="legend-item baixo-risco">
+            <td class="legend-key">Baixo Risco</td>
+            <td>Risco de Infestação: Baixo</td>
+          </tr>
+          <tr class="legend-item medio-risco">
+            <td class="legend-key">Médio Risco</td>
+            <td>Risco de Infestação: Médio</td>
+          </tr>
+          <tr class="legend-item alto-risco">
+            <td class="legend-key">Alto Risco</td>
+            <td>Risco de Infestação: Alto</td>
+          </tr>
+        </table>
+      </div>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Porcentagem de Depósitos Inspecionados"></nz-divider>
+
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+      #table
+      nzSize="small"
+      [nzData]="indiceDocumentos"
+      [nzShowPagination]="true"
+      [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 5%">Zona</th>
+            <th>Quadra</th>
+            <th>A1</th>
+            <th>A2</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D1</th>
+            <th>D2</th>
+            <th>E</th>
+            <th>Outros Depositos</th>
+            <th>Tspl</th>
+            <th>Tisa</th>
+            <th>Tvz</th>
+            <th>Tcpl</th>
+            <th>Terreno Baldio</th>
+            <th>Outros Imóveis</th>
+            <th>ifp</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let dado of indiceDocumentos" [ngClass]="getIfpColorClass(dado.ifp)">
+            <td>{{ dado.zona }}</td>
+            <td>{{ dado.quadra }}</td>
+            <td>{{ dado.qtdA1}}</td>
+            <td>{{ dado.qtdA2 }}</td>
+            <td>{{ dado.qtdB }}</td>
+            <td>{{ dado.qtdC }}</td>
+            <td>{{ dado.qtdD1 }}</td>
+            <td>{{ dado.qtdD2 }}</td>
+            <td>{{ dado.qtdE }}</td>
+            <td>{{ dado.qtdOutroTpDeposito }}</td>
+            <td>{{ dado.qtdTspl }}</td>
+            <td>{{ dado.qtdTisa }}</td>
+            <td>{{ dado.qtdTvz }}</td>
+            <td>{{ dado.qtdTcpl }}</td>
+            <td>{{ dado.qtdTerrenoBaldio }}</td>
+            <td>{{ dado.qtdOutrTpImovel }}</td>
+            <td>{{ dado.ifp.toFixed(1) }}%</td>
+          </tr>
+        </tbody>
+
+        <tfoot class="background-footer">
+          <tr>
+            <td colspan="1">Totais:</td>
+            <td>{{ indiceDocumentos.length }}</td>
+            <td>{{ totalA1 }}</td>
+            <td>{{ totalA2 }}</td>
+            <td>{{ totalB }}</td>
+            <td>{{ totalC }}</td>
+            <td>{{ totalD1 }}</td>
+            <td>{{ totalD2 }}</td>
+            <td>{{ totalE }}</td>
+            <td>{{ totalOutroTpDeposito }}</td>
+            <td>{{ totalTspl }}</td>
+            <td>{{ totalTisa }}</td>
+            <td>{{ totalTvz }}</td>
+            <td>{{ totalTcpl }}</td>
+            <td>{{ totalTerrenoBaldio }}</td>
+            <td>{{ totalOutrTpImovel }}</td>
+            <td>{{ totalIfp.toFixed(1) }}%</td>
+          </tr>
+        </tfoot>
+      </nz-table>
+    </nz-card>
+  </div>
+</div>

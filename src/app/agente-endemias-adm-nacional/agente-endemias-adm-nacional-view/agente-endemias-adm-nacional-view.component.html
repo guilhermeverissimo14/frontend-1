@@ -1,0 +1,612 @@
+<div class="row">
+  <div class="col-6 d-flex justify-content-start align-items-center">
+    <span
+      class="d-inline-block align-middle"
+      style="cursor: pointer"
+      nz-icon
+      (click)="goBack()"
+      nzType="arrow-left"
+      nzTheme="outline"
+    ></span>
+    <h3 class="d-inline-block align-middle ml-2 mt-2">Documento</h3>
+  </div>
+
+  <div class="col-6">
+    <div class="d-flex justify-content-end">
+      <button
+        nz-button
+        nzType="text"
+        (click)="handleEdit()"
+        style="
+          background-color: #228765;
+          color: white;
+          border-radius: 30px;
+          width: 190px;
+        "
+      >
+        <i nz-icon nzType="edit"></i>
+        Editar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div #container style="padding: 5px">
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações do Documento</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">ID do Documento</span>
+            <p style="font-weight: 600; color: #1e1e1e">{{ documento?.id }}</p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Data de Criação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.dataCriacao | date: 'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Hora de Criação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.dataCriacao | date:'HH:mm:ss' }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Criado pelo Agente</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              <!-- {{ documento?.usuario.nome }} -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row mt-2">
+            <div class="col-md-12 col-lg-12">
+              <div class="row">
+                <div class="col-md-12 col-lg-4">
+                  <span style="font-size: 14px">Nome</span>
+                  <p style="font-weight: 600; color: #1e1e1e">{{ paciente?.nome }}</p>
+                </div>
+
+                <div class="col-md-12 col-lg-4">
+                  <span style="font-size: 14px">Data de Nascimento</span>
+                  <p style="font-weight: 600; color: #1e1e1e">
+                    {{ paciente?.dataNascimento | date: 'dd/MM/yyyy' }}
+                  </p>
+                </div>
+
+                <div class="col-md-12 col-lg-4">
+                  <span style="font-size: 14px">CPF</span>
+                  <p style="font-weight: 600; color: #1e1e1e">
+                    {{ paciente?.cpf | cpf }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-12 col-lg-12">
+              <div class="row">
+                <div class="col-md-12 col-lg-4">
+                  <span style="font-size: 14px">Cartão do SUS</span>
+                  <p style="font-weight: 600; color: #1e1e1e">
+                    {{ paciente?.cartaoSus }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>-->
+  </div>
+
+  <!-- Informações do Proprietário -->
+
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações do Proprietário</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Nome do Proprietário</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.nomeProprietario }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px"
+              >Data de Nascimento do Proprietário</span
+            >
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.dataNascimentoProprietario | date: 'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">CPF</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.cpfProprietario | cpf }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="row mt-2">
+            <div class="col-md-12 col-lg-12">
+              <div class="row">
+                <div class="col-md-12 col-lg-4">
+                  <span style="font-size: 14px">Resultado</span>
+                  <p style="font-weight: 600; color: #1e1e1e">{{ paciente?.nome }}</p>
+                </div>
+              </div>
+            </div>
+          </div>-->
+  </div>
+
+  <!-- Informações da Visita -->
+
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+    *ngIf="documento?.acessoImovel"
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações da Visita</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Possíveis Criadouros</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.presencaCriadouros == true ? "Sim" : "Não" }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Quantidade de Criadouro</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.quantidade }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Presença de Larvas</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.presencaLarva == true ? "Sim" : "Não" }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Intervenção</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getTipoIntervencaoName(documento?.tipoIntervencao) }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Análise de Laboratório</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getTipoAnaliseName(documento?.tipoAnalise) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Tipo de Depósito</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getTipoDeposito(documento?.tipoDeposito) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Observação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.observacaoCriadouro }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informações da Imóvel -->
+
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações do Imóvel</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Características</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getTipoImovelNome(documento?.tipoImovel) }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Acesso</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.acessoImovel == true ? "Sim" : "Não" }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">UF</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.uf }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Cidade</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.cidade }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Logradouro</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.logradouro }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Número</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.numero }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Bairro</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.bairro }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">CEP</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getCepFormatado(documento?.cep) }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-3">
+            <span style="font-size: 14px">Observação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ documento?.observacao }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anexo -->
+
+  <div
+    class="container-fluid mt-5 d-flex align-items-center flex-column"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+    *ngIf="(documento?.fotoCriadouro != null && documento?.fotoCriadouro != '' && documento?.fotoCriadouro != undefined)
+    || (documento?.foto != null && documento?.foto != '' && documento?.foto != undefined)"
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+        align-self: normal;
+      "
+    >
+      <div class="col-md-12 text-center mt-3" >
+        <strong>Anexo</strong>
+      </div>
+    </div>
+    <br>
+    <div class="row mt-4" *ngIf="documento?.fotoCriadouro != null && documento?.fotoCriadouro != '' && documento?.fotoCriadouro != undefined">
+      <div class="col-md-12 col-lg-12">
+        <p class="text-center" style="font-weight: 600; color: #1e1e1e">
+          Criadouro:
+        </p>
+      <br>
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <img
+              [src]="documento?.fotoCriadouro"
+              alt="Foto Criadouro"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <div class="row mt-4" *ngIf="documento?.foto != null && documento?.foto != '' && documento?.foto != undefined">
+      <div class="col-md-12 col-lg-12">
+        <p class="text-center" style="font-weight: 600; color: #1e1e1e">
+          Acesso Imóvel:
+        </p>
+        <br>
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <img
+              [src]="documento?.foto"
+              alt="Foto Criadouro"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+</div>
+
+<div
+  class="row d-flex justify-content-center"
+  style="margin-top: 40px; margin-bottom: 50px"
+>
+  <div
+    class="col-md-12 col-lg-4 d-flex justify-content-center align-items-center"
+  >
+    <button
+      nz-button
+      (click)="handleDownload()"
+      [nzLoading]="downloading"
+      class="btn-unicasu-primary w-100"
+      nzBlock
+      nzSize="large"
+    >
+      Download
+    </button>
+  </div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzFooter]="null"
+  (nzOnCancel)="modalVisible = false"
+  nzTitle="Editar Informações"
+  nzWidth="640px"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      nzLayout="vertical"
+      [formGroup]="form"
+      (ngSubmit)="handleSubmit()"
+    >
+      <div class="row">
+        <div class="col-md-12 col-lg-6">
+          <nz-form-item>
+            <nz-form-label>Nome</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                formControlName="nome"
+                minlength="1"
+                maxlength="255"
+                nz-input
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+          <nz-form-item>
+            <nz-form-label>CPF</nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="
+                cpfControl.hasError('minlength') ? 'Informe 11 dígitos!' : null
+              "
+            >
+              <input
+                type="text"
+                formControlName="cpf"
+                cpfMask
+                (keydown)="handleCpfMaxDigits($event)"
+                nz-input
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 col-lg-6">
+          <nz-form-item>
+            <nz-form-label>Data de Nascimento</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                nz-input
+                placeholder="dd/mm/aaaa"
+                formControlName="dataNascimento"
+                [ngModel]="
+                  this.documento?.dataNascimentoProprietario | date: 'dd/MM/yyyy'
+                "
+                (keyup)="onTypingDate($event)"
+                maxlength="10"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+          <nz-form-item>
+            <nz-form-label>Intervenção</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="intervencao"
+                [nzOptions]="intervencaoOptions"
+                nzAllowSearch
+                nzAllowClear
+              ></nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 col-lg-6">
+          <nz-form-item>
+            <nz-form-label>Análise de Laboratório</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="analiseLaboratorio"
+                [nzOptions]="analiseOptions"
+                nzAllowSearch
+                nzAllowClear
+              ></nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="row mt-2 mb-4 d-flex justify-content-center">
+        <div
+          class="col-md-12 col-lg-6 d-flex justify-content-center align-items-center"
+        >
+          <button
+            nz-button
+            class="btn-unicasu-primary w-100"
+            [nzLoading]="loading"
+            nzBlock
+            nzSize="large"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

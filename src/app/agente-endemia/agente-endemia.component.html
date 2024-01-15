@@ -1,0 +1,163 @@
+<form nz-form nzLayout="vertical" [formGroup]="mainForm">
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input
+          type="text"
+          nz-input
+          formControlName="nome"
+          (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome do proprietário do documento"
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search"></span
+      ></ng-template>
+    </div>
+  </div>
+</form>
+
+<div class="row mt-4 mb-4">
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="listarDocumentosIntervencao()"
+      >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-start">
+          <img class="img-fluid mx-3" src="./assets/images/intervencoes.png" />
+          <span style="font-weight: 500; font-size: 16px">Intervenções</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="listarDocumentosAnalisePendente()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-start">
+          <img class="img-fluid mx-3" src="./assets/images/analise.png" />
+          <span style="font-weight: 500; font-size: 16px">Análises</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-12 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="listarDocumentosSemAcesso()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-end">
+          <img class="img-fluid mx-3" src="./assets/images/sem_acesso.png" />
+          <span style="font-weight: 500; font-size: 16px">Sem Acesso</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-12 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="listarDocumentosSemFoco()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-end">
+          <img class="img-fluid mx-3" src="./assets/images/sem_foco.png" />
+          <span style="font-weight: 500; font-size: 16px">Sem Foco</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container
+  *ngIf="
+    shouldShowIntervencoes ||
+    shouldShowAnalises ||
+    shouldShowSemAcesso ||
+    shouldShowSemFoco
+  "
+>
+  <form  nz-form nzLayout="vertical" [formGroup]="formFilter">
+    <div class="row content-indice">
+      <div class="col-md-3 col-sm-4">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="A-Z"
+              formControlName="ascendente"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              [nzOptions]="ascendenteOptions"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div *ngFor="let dado of indiceDocumento"  style="margin-right: 30px;">
+        <h3>Índice Breteau: {{ dado.breteau }}%</h3>
+      </div>
+    </div>
+  </form>
+
+  <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+    <div class="mb-5">
+      <nz-table
+        #table
+        nzSize="small"
+        [nzData]="documentos"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cidade</th>
+            <th>Bairro</th>
+            <th>Logradouro</th>
+            <th>Número</th>
+            <th *ngIf="shouldShowIntervencoes">Intervenção</th>
+            <th *ngIf="shouldShowAnalises">Análise</th>
+            <th *ngIf="shouldShowResultados">Resultado</th>
+            <th>Data de Criação</th>
+            <th>Hora de Criação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-documento [ngForOf]="table.data">
+            <tr (click)="handleView(documento)">
+              <td style="margin-right: 20px">
+                {{ documento.id }}
+              </td>
+              <td>{{ documento.cidade }}</td>
+              <td>{{ documento.bairro }}</td>
+              <td>{{ documento.logradouro }}</td>
+              <td>{{ documento.numero }}</td>
+              <td *ngIf="shouldShowIntervencoes">
+                <nz-tag nzColor="success">{{
+                  getTipoIntervencaoName(documento?.tipoAnalise)
+                }}</nz-tag>
+              </td>
+              <td *ngIf="shouldShowIntervencoes">
+                <nz-tag nzColor="success">{{
+                  getTipoIntervencaoName(documento.tipoIntervencao)
+                }}</nz-tag>
+              </td>
+              <td *ngIf="shouldShowAnalises" (click)="handleClicking($event)">
+                <nz-tag nzColor="success">{{
+                  getTipoAnaliseName(documento.tipoAnalise)
+                }}</nz-tag>
+              </td>
+              <td>{{ documento.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ documento.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00' }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-card>
+</ng-container>

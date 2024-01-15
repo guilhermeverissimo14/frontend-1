@@ -1,0 +1,286 @@
+<div class="row">
+  <div class="col-6 d-flex justify-content-start align-items-center">
+    <span
+      class="d-inline-block align-middle"
+      style="cursor: pointer"
+      nz-icon
+      (click)="goBack()"
+      nzType="arrow-left"
+      nzTheme="outline"
+    ></span>
+    <h3 class="d-inline-block align-middle ml-2 mt-2">Paciente</h3>
+  </div>
+</div>
+
+<div #container style="padding: 5px;">
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações do Paciente</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">ID do Paciente</span>
+            <p style="font-weight: 600; color: #1e1e1e">{{ paciente?.id }}</p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Data de Criação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.dataCriacao | date: 'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Hora de Criação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Nome</span>
+            <p style="font-weight: 600; color: #1e1e1e">{{ paciente?.nome }}</p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Data de Nascimento</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.dataNascimento | date: 'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">CPF</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.cpf | cpf }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Cartão do SUS</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.cartaoSus }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informações da Análise -->
+
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações da Análise</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Tipo de Arbovirose</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{
+                paciente?.tipoArbovirose == "FEBRE_AMARELA"
+                  ? "Febre Amarela"
+                  : (paciente?.tipoArbovirose | capitalize)
+              }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Tipo de Análise</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.tipoAnalise | capitalize }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Código</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.codigo }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Resultado</span>
+            <p style="font-weight: 600; color: #1e1e1e">{{ getAnalisePaciente(paciente?.analisePaciente) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informações do Imóvel -->
+
+  <div
+    class="container-fluid mt-5"
+    style="
+      box-shadow: 0px 3px 19px rgba(0, 0, 0, 0.25);
+      width: auto;
+      height: auto;
+      padding-bottom: 10px;
+      border-radius: 30px;
+      border: 1px solid #d9d9d9;
+    "
+  >
+    <div
+      class="row"
+      style="
+        background-color: #d9d9d9;
+        height: 62px;
+        border-radius: 30px 30px 0px 0px;
+      "
+    >
+      <div class="col-md-12 text-center mt-3">
+        <strong>Informações do Imóvel</strong>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Logradouro</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.logradouro }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Número</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.numero }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Bairro</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.bairro }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">UF</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.estado }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Cidade</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.cidade }}
+            </p>
+          </div>
+
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">CEP</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ getCepFormatado(paciente?.cep) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-md-12 col-lg-4">
+            <span style="font-size: 14px">Observação</span>
+            <p style="font-weight: 600; color: #1e1e1e">
+              {{ paciente?.observacao }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="row d-flex justify-content-center"
+  style="margin-top: 40px; margin-bottom: 50px"
+>
+  <div
+    class="col-md-12 col-lg-4 d-flex justify-content-center align-items-center"
+  >
+    <button
+      nz-button
+      (click)="handleDownload()"
+      [nzLoading]="downloading"
+      class="btn-unicasu-primary w-100"
+      nzBlock
+      nzSize="large"
+    >
+      Download
+    </button>
+  </div>
+</div>

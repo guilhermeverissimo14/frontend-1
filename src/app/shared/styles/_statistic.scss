@@ -1,0 +1,15 @@
+.ant-statistic-title {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: bold;
+  color: $gray-600;
+}
+
+.ant-statistic-content {
+  display: flex;
+
+  nz-statistic-number {
+    flex: 1;
+    font-weight: bold;
+  }
+}

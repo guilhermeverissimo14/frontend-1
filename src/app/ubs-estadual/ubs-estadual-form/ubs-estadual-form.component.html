@@ -1,0 +1,189 @@
+<div class="row mt-2 mb-5">
+  <div
+    class="col-md-12 col-lg-12 d-flex justify-content-start align-items-center"
+  >
+    <span
+      class="d-inline-block align-middle"
+      style="cursor: pointer"
+      nz-icon
+      (click)="goBack()"
+      nzType="arrow-left"
+      nzTheme="outline"
+    ></span>
+    <h3 class="d-inline-block align-middle ml-2 mt-2">Novo Cadastro</h3>
+  </div>
+</div>
+
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="form"
+  (ngSubmit)="handleSubmit()"
+>
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Nome</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="nome"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>CNPJ</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="cnpj"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>CNES</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="cnes"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>CEP</nz-form-label>
+        <nz-form-control
+          [nzErrorTip]="
+            form.get('cep').hasError('minlength') ? 'Informe 8 dígitos!' : null
+          "
+        >
+          <input
+            type="text"
+            placeholder="00000-000"
+            formControlName="cep"
+            cepMask
+            (ngModelChange)="handleCep()"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Estado</nz-form-label>
+        <nz-form-control>
+          <input
+            formControlName="estado"
+            type="text"
+            minlength="1"
+            maxlength="255"
+            nz-input/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Cidade</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            nzAllowClear
+            nzShowSearch
+            formControlName="municipio">
+              <nz-option *ngFor="let cidade of cidadeOptions" [nzLabel]="cidade.label" [nzValue]="cidade.value"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row">  
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Bairro</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="bairro"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Logradouro</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            formControlName="logradouro"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-lg-6">
+      <nz-form-item>
+        <nz-form-label>Número</nz-form-label>
+        <nz-form-control>
+          <input
+            type="text"
+            (keypress)="handleKeyPress($event)"
+            formControlName="numero"
+            minlength="1"
+            maxlength="255"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div class="row mt-2 mb-4">
+    <div
+      class="col-md-12 col-lg-12 d-flex justify-content-center align-items-center"
+    >
+      <button
+        type="submit"
+        nz-button
+        class="btn-unicasu-primary w-25"
+        [nzLoading]="loading"
+        nzBlock
+        nzSize="large"
+      >
+        Salvar
+      </button>
+    </div>
+  </div>
+</form>

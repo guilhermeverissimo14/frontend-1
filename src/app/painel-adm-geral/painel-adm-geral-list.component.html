@@ -1,0 +1,117 @@
+<form
+  nz-form
+  nzLayout="vertical"
+  [formGroup]="mainForm"
+  style="margin-bottom: 50px"
+>
+  <div class="row">
+    <div class="col-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input
+          type="text"
+          nz-input
+          formControlName="nome"
+          (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome"
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search"></span
+      ></ng-template>
+    </div>
+
+    <div class="col-6" *ngIf="isAdmGeral || isAdmEstadual || isAdmNacional">
+      <div class="d-flex justify-content-end">
+        <button
+          nz-button
+          nzType="text"
+          (click)="handleCreate()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          <i nz-icon nzType="plus"></i>
+          Novo Usuário
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<ng-container>
+  <form nz-form nzLayout="vertical" [formGroup]="formFilter">
+    <div class="row">
+      <div class="col-md-3 col-sm-4" *ngIf="isAdmGeral || isAdmNacional">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="Estado"
+              formControlName="estado"
+              (ngModelChange)="listByFilter();listCidadeByEstado()"
+              nzShowSearch
+              nzAllowClear
+              [nzOptions]="estados"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="col-md-3 col-sm-4">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="Cidade"
+              formControlName="cidade"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              nzShowSearch>
+              <nz-option *ngFor="let cidade of cidadeOptions" [nzLabel]="cidade.label" [nzValue]="cidade.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+    <div class="mb-5">
+      <nz-table
+        #table
+        nzPageSize="15"
+        nzSize="small"
+        [nzData]="usuarios"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Data de Criação</th>
+            <th>Hora de Criação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-usuario [ngForOf]="table.data">
+            <tr>
+              <td (click)="handleEdit(usuario)" style="margin-right: 20px">
+                {{ usuario.id }}
+              </td>
+              <td (click)="handleEdit(usuario)">{{ usuario.nome }}</td>
+              <td (click)="handleEdit(usuario)">
+                <nz-tag nzColor="success">{{
+                  getRolename(usuario.tipoUsuario)
+                }}</nz-tag>
+              </td>
+              <td (click)="handleEdit(usuario)">{{ usuario.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+              <td (click)="handleEdit(usuario)">{{ usuario.horaCriacao | date: 'dd/MM/yyyy' }}</td>
+              <td><span (click)="deleteUserById(usuario.id)" style="color: red;" class="material-symbols-outlined">
+                delete
+                </span></td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-card>
+</ng-container>

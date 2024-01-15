@@ -1,0 +1,659 @@
+<form nz-form nzLayout="vertical" [formGroup]="form">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="d-flex justify-content-end">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-date-picker
+              formControlName="data"
+              nzFormat="dd/MM/yyyy"
+              [nzDisabledDate]="disabledDate"
+            >
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <button
+          nz-button
+          nzBlock
+          type="button"
+          [nzLoading]="downloading"
+          class="ml-2 w-25"
+          (click)="handleDownload()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row" #container>
+  <div class="col-md-12 col-lg-12">
+    <nz-divider nzText="Mapa Nacional"></nz-divider>
+
+    <div #map style="height: 400px"></div>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Notificações das Cidades"></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        #table
+        nzSize="small"
+        [nzData]="relatorios"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Métrica Analisada</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Risco Transmissão</th>
+            <th>Índice de Infestação Predial (IIP)</th>
+            <th>Índice de Breteau (IB)</th>
+            <th>Notificados</th>
+            <th>Casos positivos</th>
+            <th>Casos suspeitos</th>
+            <th>Internados</th>
+            <th>Óbitos</th>
+            <th>Óbitos suspeitos</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-relatorio [ngForOf]="table.data">
+            <tr>
+              <td style="margin-right: 20px">
+                {{ relatorio.id }}
+              </td>
+              <td>Resultado/valor</td>
+              <td>{{ relatorio.usuario?.municipio }}</td>
+              <td>{{ getNomeEstado(relatorio.usuario?.estado) }}</td>
+              <td>
+                {{ getRiscoTransmissaoLabel(relatorio.riscoTransmissao) }}
+              </td>
+              <td>
+                {{
+                  getIndiceInfestacaoLabel(relatorio.indiceInfestacaoPredial)
+                }}
+              </td>
+              <td>{{ relatorio.indiceBreteau }}</td>
+              <td>{{ relatorio.notificados }}</td>
+              <td>{{ relatorio.casosPositivos }}</td>
+              <td>{{ relatorio.casosSuspeitos }}</td>
+              <td>{{ relatorio.internados }}</td>
+              <td>{{ relatorio.obitos }}</td>
+              <td>{{ relatorio.obitosSuspeitos }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Classificação dos Setores (Risco de Transmissão de Dengue, Zika e Chikungunya)"
+    ></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzLoading]="loading"
+        [nzData]="['']"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 40%">Risco</th>
+            <th>Nº Setores</th>
+            <th>%</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <nz-tag nzColor="success">Baixo risco (menor que 0,9)</nz-tag>
+            </td>
+            <td>{{ baixoRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(baixoRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(baixoRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="gold">Médio risco (entre 1,0 e 3,9)</nz-tag>
+            </td>
+            <td>{{ medioRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(medioRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(medioRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="red">Alto risco (acima de 3,9)</nz-tag>
+            </td>
+            <td>{{ altoRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(altoRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(altoRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Total</nz-tag>
+            </td>
+            <td>{{ relatorios?.length }}</td>
+            <td>100%</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Situação dos Setores - Índice de Infestação Predial (IIP)"
+    ></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzData]="relatorios"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 40%">Risco</th>
+            <th>Região</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-relatorio [ngForOf]="table.data">
+            <tr>
+              <td>
+                <nz-tag
+                  nzColor="success"
+                  *ngIf="relatorio.riscoTransmissao == 'BAIXO'"
+                  >Baixo risco (menor que 0,9)</nz-tag
+                >
+                <nz-tag
+                  nzColor="gold"
+                  *ngIf="relatorio.riscoTransmissao == 'MEDIO'"
+                  >Médio risco (entre 1,0 e 3,9)</nz-tag
+                >
+                <nz-tag
+                  nzColor="red"
+                  *ngIf="relatorio.riscoTransmissao == 'ALTO'"
+                  >Alto risco (acima de 3,9)</nz-tag
+                >
+              </td>
+              <td>{{ getNomeEstado(relatorio.usuario?.estado) }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Número de Depósitos Inspecionados (Tipos de Depósitos)"
+    ></nz-divider>
+    <nz-card
+      class="card-table d-flex justify-content-center"
+      style="border-radius: 15px; overflow: hidden"
+    >
+      <br />
+      <ngx-charts-bar-vertical
+        *ngIf="graphVisible"
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+      >
+      </ngx-charts-bar-vertical>
+
+      <nz-divider></nz-divider>
+
+      <h4>
+        A1 - Armazenamento de Água (Elevado);<br />
+        A2 - Armazenamento de Água (Nível do Solo);<br />B - Pequenos
+        recipientes móveis; <br />C - Recipientes fixos; <br />D1 - Pneus;
+        <br />D2 - Lixo e Sucata; <br />E - Recipientes naturais
+      </h4>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Porcentagem de Depósitos Inspecionados"></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzData]="['']"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 20%">Gersa</th>
+            <th>A1</th>
+            <th>A2</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D1</th>
+            <th>D2</th>
+            <th>E</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Acre</nz-tag>
+            </td>
+            <td>{{ documentosAcre.columnOne }}</td>
+            <td>{{ documentosAcre.columnTwo }}</td>
+            <td>{{ documentosAcre.columnThree }}</td>
+            <td>{{ documentosAcre.columnFour }}</td>
+            <td>{{ documentosAcre.columnFive }}</td>
+            <td>{{ documentosAcre.columnSix }}</td>
+            <td>{{ documentosAcre.columnSeven }}</td>
+            <td>{{ documentosAcre.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Alagoas</nz-tag>
+            </td>
+            <td>{{ documentosAlagoas.columnOne }}</td>
+            <td>{{ documentosAlagoas.columnTwo }}</td>
+            <td>{{ documentosAlagoas.columnThree }}</td>
+            <td>{{ documentosAlagoas.columnFour }}</td>
+            <td>{{ documentosAlagoas.columnFive }}</td>
+            <td>{{ documentosAlagoas.columnSix }}</td>
+            <td>{{ documentosAlagoas.columnSeven }}</td>
+            <td>{{ documentosAlagoas.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Amapa</nz-tag>
+            </td>
+            <td>{{ documentosAmapa.columnOne }}</td>
+            <td>{{ documentosAmapa.columnTwo }}</td>
+            <td>{{ documentosAmapa.columnThree }}</td>
+            <td>{{ documentosAmapa.columnFour }}</td>
+            <td>{{ documentosAmapa.columnFive }}</td>
+            <td>{{ documentosAmapa.columnSix }}</td>
+            <td>{{ documentosAmapa.columnSeven }}</td>
+            <td>{{ documentosAmapa.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Amazonas</nz-tag>
+            </td>
+            <td>{{ documentosAmazonas.columnOne }}</td>
+            <td>{{ documentosAmazonas.columnTwo }}</td>
+            <td>{{ documentosAmazonas.columnThree }}</td>
+            <td>{{ documentosAmazonas.columnFour }}</td>
+            <td>{{ documentosAmazonas.columnFive }}</td>
+            <td>{{ documentosAmazonas.columnSix }}</td>
+            <td>{{ documentosAmazonas.columnSeven }}</td>
+            <td>{{ documentosAmazonas.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Bahia</nz-tag>
+            </td>
+            <td>{{ documentosBahia.columnOne }}</td>
+            <td>{{ documentosBahia.columnTwo }}</td>
+            <td>{{ documentosBahia.columnThree }}</td>
+            <td>{{ documentosBahia.columnFour }}</td>
+            <td>{{ documentosBahia.columnFive }}</td>
+            <td>{{ documentosBahia.columnSix }}</td>
+            <td>{{ documentosBahia.columnSeven }}</td>
+            <td>{{ documentosBahia.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Ceara</nz-tag>
+            </td>
+            <td>{{ documentosCeara.columnOne }}</td>
+            <td>{{ documentosCeara.columnTwo }}</td>
+            <td>{{ documentosCeara.columnThree }}</td>
+            <td>{{ documentosCeara.columnFour }}</td>
+            <td>{{ documentosCeara.columnFive }}</td>
+            <td>{{ documentosCeara.columnSix }}</td>
+            <td>{{ documentosCeara.columnSeven }}</td>
+            <td>{{ documentosCeara.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Distrito Federal</nz-tag>
+            </td>
+            <td>{{ documentosDistritoFederal.columnOne }}</td>
+            <td>{{ documentosDistritoFederal.columnTwo }}</td>
+            <td>{{ documentosDistritoFederal.columnThree }}</td>
+            <td>{{ documentosDistritoFederal.columnFour }}</td>
+            <td>{{ documentosDistritoFederal.columnFive }}</td>
+            <td>{{ documentosDistritoFederal.columnSix }}</td>
+            <td>{{ documentosDistritoFederal.columnSeven }}</td>
+            <td>{{ documentosDistritoFederal.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Esprito Santo</nz-tag>
+            </td>
+            <td>{{ documentosEspiritoSanto.columnOne }}</td>
+            <td>{{ documentosEspiritoSanto.columnTwo }}</td>
+            <td>{{ documentosEspiritoSanto.columnThree }}</td>
+            <td>{{ documentosEspiritoSanto.columnFour }}</td>
+            <td>{{ documentosEspiritoSanto.columnFive }}</td>
+            <td>{{ documentosEspiritoSanto.columnSix }}</td>
+            <td>{{ documentosEspiritoSanto.columnSeven }}</td>
+            <td>{{ documentosEspiritoSanto.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Goiás</nz-tag>
+            </td>
+            <td>{{ documentosGoias.columnOne }}</td>
+            <td>{{ documentosGoias.columnTwo }}</td>
+            <td>{{ documentosGoias.columnThree }}</td>
+            <td>{{ documentosGoias.columnFour }}</td>
+            <td>{{ documentosGoias.columnFive }}</td>
+            <td>{{ documentosGoias.columnSix }}</td>
+            <td>{{ documentosGoias.columnSeven }}</td>
+            <td>{{ documentosGoias.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Maranhão</nz-tag>
+            </td>
+            <td>{{ documentosMaranhao.columnOne }}</td>
+            <td>{{ documentosMaranhao.columnTwo }}</td>
+            <td>{{ documentosMaranhao.columnThree }}</td>
+            <td>{{ documentosMaranhao.columnFour }}</td>
+            <td>{{ documentosMaranhao.columnFive }}</td>
+            <td>{{ documentosMaranhao.columnSix }}</td>
+            <td>{{ documentosMaranhao.columnSeven }}</td>
+            <td>{{ documentosMaranhao.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Mato Grosso</nz-tag>
+            </td>
+            <td>{{ documentosMatoGrosso.columnOne }}</td>
+            <td>{{ documentosMatoGrosso.columnTwo }}</td>
+            <td>{{ documentosMatoGrosso.columnThree }}</td>
+            <td>{{ documentosMatoGrosso.columnFour }}</td>
+            <td>{{ documentosMatoGrosso.columnFive }}</td>
+            <td>{{ documentosMatoGrosso.columnSix }}</td>
+            <td>{{ documentosMatoGrosso.columnSeven }}</td>
+            <td>{{ documentosMatoGrosso.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Mato Grosso do Sul</nz-tag>
+            </td>
+            <td>{{ documentosMatoGrossoSul.columnOne }}</td>
+            <td>{{ documentosMatoGrossoSul.columnTwo }}</td>
+            <td>{{ documentosMatoGrossoSul.columnThree }}</td>
+            <td>{{ documentosMatoGrossoSul.columnFour }}</td>
+            <td>{{ documentosMatoGrossoSul.columnFive }}</td>
+            <td>{{ documentosMatoGrossoSul.columnSix }}</td>
+            <td>{{ documentosMatoGrossoSul.columnSeven }}</td>
+            <td>{{ documentosMatoGrossoSul.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Minas Gerais</nz-tag>
+            </td>
+            <td>{{ documentosMinasGerais.columnOne }}</td>
+            <td>{{ documentosMinasGerais.columnTwo }}</td>
+            <td>{{ documentosMinasGerais.columnThree }}</td>
+            <td>{{ documentosMinasGerais.columnFour }}</td>
+            <td>{{ documentosMinasGerais.columnFive }}</td>
+            <td>{{ documentosMinasGerais.columnSix }}</td>
+            <td>{{ documentosMinasGerais.columnSeven }}</td>
+            <td>{{ documentosMinasGerais.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Pará</nz-tag>
+            </td>
+            <td>{{ documentosPara.columnOne }}</td>
+            <td>{{ documentosPara.columnTwo }}</td>
+            <td>{{ documentosPara.columnThree }}</td>
+            <td>{{ documentosPara.columnFour }}</td>
+            <td>{{ documentosPara.columnFive }}</td>
+            <td>{{ documentosPara.columnSix }}</td>
+            <td>{{ documentosPara.columnSeven }}</td>
+            <td>{{ documentosPara.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Paraíba</nz-tag>
+            </td>
+            <td>{{ documentosParaiba.columnOne }}</td>
+            <td>{{ documentosParaiba.columnTwo }}</td>
+            <td>{{ documentosParaiba.columnThree }}</td>
+            <td>{{ documentosParaiba.columnFour }}</td>
+            <td>{{ documentosParaiba.columnFive }}</td>
+            <td>{{ documentosParaiba.columnSix }}</td>
+            <td>{{ documentosParaiba.columnSeven }}</td>
+            <td>{{ documentosParaiba.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Paraná</nz-tag>
+            </td>
+            <td>{{ documentosParana.columnOne }}</td>
+            <td>{{ documentosParana.columnTwo }}</td>
+            <td>{{ documentosParana.columnThree }}</td>
+            <td>{{ documentosParana.columnFour }}</td>
+            <td>{{ documentosParana.columnFive }}</td>
+            <td>{{ documentosParana.columnSix }}</td>
+            <td>{{ documentosParana.columnSeven }}</td>
+            <td>{{ documentosParana.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Pernambuco</nz-tag>
+            </td>
+            <td>{{ documentosPernambuco.columnOne }}</td>
+            <td>{{ documentosPernambuco.columnTwo }}</td>
+            <td>{{ documentosPernambuco.columnThree }}</td>
+            <td>{{ documentosPernambuco.columnFour }}</td>
+            <td>{{ documentosPernambuco.columnFive }}</td>
+            <td>{{ documentosPernambuco.columnSix }}</td>
+            <td>{{ documentosPernambuco.columnSeven }}</td>
+            <td>{{ documentosPernambuco.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Piauí</nz-tag>
+            </td>
+            <td>{{ documentosPiaui.columnOne }}</td>
+            <td>{{ documentosPiaui.columnTwo }}</td>
+            <td>{{ documentosPiaui.columnThree }}</td>
+            <td>{{ documentosPiaui.columnFour }}</td>
+            <td>{{ documentosPiaui.columnFive }}</td>
+            <td>{{ documentosPiaui.columnSix }}</td>
+            <td>{{ documentosPiaui.columnSeven }}</td>
+            <td>{{ documentosPiaui.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Rio de Janeiro</nz-tag>
+            </td>
+            <td>{{ documentosRioJaneiro.columnOne }}</td>
+            <td>{{ documentosRioJaneiro.columnTwo }}</td>
+            <td>{{ documentosRioJaneiro.columnThree }}</td>
+            <td>{{ documentosRioJaneiro.columnFour }}</td>
+            <td>{{ documentosRioJaneiro.columnFive }}</td>
+            <td>{{ documentosRioJaneiro.columnSix }}</td>
+            <td>{{ documentosRioJaneiro.columnSeven }}</td>
+            <td>{{ documentosRioJaneiro.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Rio Grande do Norte</nz-tag>
+            </td>
+            <td>{{ documentosRioGrandeNorte.columnOne }}</td>
+            <td>{{ documentosRioGrandeNorte.columnTwo }}</td>
+            <td>{{ documentosRioGrandeNorte.columnThree }}</td>
+            <td>{{ documentosRioGrandeNorte.columnFour }}</td>
+            <td>{{ documentosRioGrandeNorte.columnFive }}</td>
+            <td>{{ documentosRioGrandeNorte.columnSix }}</td>
+            <td>{{ documentosRioGrandeNorte.columnSeven }}</td>
+            <td>{{ documentosRioGrandeNorte.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Rio Grande do Sul</nz-tag>
+            </td>
+            <td>{{ documentosRioGrandeSul.columnOne }}</td>
+            <td>{{ documentosRioGrandeSul.columnTwo }}</td>
+            <td>{{ documentosRioGrandeSul.columnThree }}</td>
+            <td>{{ documentosRioGrandeSul.columnFour }}</td>
+            <td>{{ documentosRioGrandeSul.columnFive }}</td>
+            <td>{{ documentosRioGrandeSul.columnSix }}</td>
+            <td>{{ documentosRioGrandeSul.columnSeven }}</td>
+            <td>{{ documentosRioGrandeSul.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Rondônia</nz-tag>
+            </td>
+            <td>{{ documentosRondonia.columnOne }}</td>
+            <td>{{ documentosRondonia.columnTwo }}</td>
+            <td>{{ documentosRondonia.columnThree }}</td>
+            <td>{{ documentosRondonia.columnFour }}</td>
+            <td>{{ documentosRondonia.columnFive }}</td>
+            <td>{{ documentosRondonia.columnSix }}</td>
+            <td>{{ documentosRondonia.columnSeven }}</td>
+            <td>{{ documentosRondonia.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Roraima</nz-tag>
+            </td>
+            <td>{{ documentosRoraima.columnOne }}</td>
+            <td>{{ documentosRoraima.columnTwo }}</td>
+            <td>{{ documentosRoraima.columnThree }}</td>
+            <td>{{ documentosRoraima.columnFour }}</td>
+            <td>{{ documentosRoraima.columnFive }}</td>
+            <td>{{ documentosRoraima.columnSix }}</td>
+            <td>{{ documentosRoraima.columnSeven }}</td>
+            <td>{{ documentosRoraima.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Santa Catarina</nz-tag>
+            </td>
+            <td>{{ documentosSantaCatarina.columnOne }}</td>
+            <td>{{ documentosSantaCatarina.columnTwo }}</td>
+            <td>{{ documentosSantaCatarina.columnThree }}</td>
+            <td>{{ documentosSantaCatarina.columnFour }}</td>
+            <td>{{ documentosSantaCatarina.columnFive }}</td>
+            <td>{{ documentosSantaCatarina.columnSix }}</td>
+            <td>{{ documentosSantaCatarina.columnSeven }}</td>
+            <td>{{ documentosSantaCatarina.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">São Paulo</nz-tag>
+            </td>
+            <td>{{ documentosSaoPaulo.columnOne }}</td>
+            <td>{{ documentosSaoPaulo.columnTwo }}</td>
+            <td>{{ documentosSaoPaulo.columnThree }}</td>
+            <td>{{ documentosSaoPaulo.columnFour }}</td>
+            <td>{{ documentosSaoPaulo.columnFive }}</td>
+            <td>{{ documentosSaoPaulo.columnSix }}</td>
+            <td>{{ documentosSaoPaulo.columnSeven }}</td>
+            <td>{{ documentosSaoPaulo.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Sergipe</nz-tag>
+            </td>
+            <td>{{ documentosSergipe.columnOne }}</td>
+            <td>{{ documentosSergipe.columnTwo }}</td>
+            <td>{{ documentosSergipe.columnThree }}</td>
+            <td>{{ documentosSergipe.columnFour }}</td>
+            <td>{{ documentosSergipe.columnFive }}</td>
+            <td>{{ documentosSergipe.columnSix }}</td>
+            <td>{{ documentosSergipe.columnSeven }}</td>
+            <td>{{ documentosSergipe.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Tocantins</nz-tag>
+            </td>
+            <td>{{ documentosTocantins.columnOne }}</td>
+            <td>{{ documentosTocantins.columnTwo }}</td>
+            <td>{{ documentosTocantins.columnThree }}</td>
+            <td>{{ documentosTocantins.columnFour }}</td>
+            <td>{{ documentosTocantins.columnFive }}</td>
+            <td>{{ documentosTocantins.columnSix }}</td>
+            <td>{{ documentosTocantins.columnSeven }}</td>
+            <td>{{ documentosTocantins.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Total</nz-tag>
+            </td>
+            <td>{{ totalPorcentagemDepositosInspecionados.a1 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.a2 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.b }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.c }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.d1 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.d2 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.e }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.total }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</div>

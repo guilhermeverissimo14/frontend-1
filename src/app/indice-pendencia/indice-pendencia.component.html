@@ -1,0 +1,47 @@
+<div class="filtro-container">
+  <select id="filtroMes" [(ngModel)]="mesSelecionado">
+    <option *ngFor="let mes of meses" [value]="mes.valor">
+      {{ mes.nome }}
+    </option>
+  </select>
+  <select id="filtroAno" [(ngModel)]="anoSelecionado">
+    <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+  </select>
+  <button
+    style="background-color: #228765; color: white; border-radius: 30px"
+    (click)="listPendencias()"
+  >
+    Aplicar Filtro
+  </button>
+</div>
+
+<nz-card class="card-table" style="border-radius: 15px; overflow: hidden; margin-top: 5rem">
+  <div class="mb-5">
+    <nz-table
+     #table nzSize="small"
+     [nzData]="pendencias"
+     [nzLoading]="loading"
+    [nzShowPagination]="true"
+     [nzFrontPagination]="true">
+      <thead>
+        <tr>
+          <th>Agente de Endemias</th>
+          <th>Vistorias a Fazer</th>
+          <th>Vistorias Realizadas</th>
+          <th>Vistorias Pendentes</th>
+          <th>Porcentagem de pendências %</th>
+        </tr>
+      </thead>
+
+      <tbody>
+          <tr *ngFor="let pendencia of pendencias">
+            <td>{{pendencia.agenteNome}}</td>
+            <td>{{pendencia.vistoriaAFazer}}</td>
+            <td>{{pendencia.vistoriaRealizada}}</td>
+            <td>{{pendencia.vistoriaPendente}}</td>
+            <td>{{pendencia.porcentagemPendencia | number:'1.2-2'}}%</td>
+          </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>

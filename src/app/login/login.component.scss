@@ -1,0 +1,58 @@
+@import "src/app/shared/styles/variables";
+
+.login-container {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.card-style {
+  padding: 20px;
+  border-radius: 15px;
+}
+
+a.unicasu-primary-color {
+  text-decoration: underline;
+}
+
+.btn-unicasu-primary {
+  background-color: #228765;
+  color: #ffffff;
+}
+
+.unicasu-primary-color {
+  color: #228765;
+}
+
+.float-right {
+  float: right;
+}
+::ng-deep .ant-input-affix-wrapper {
+  border-radius: 25px;
+  height: 45px;
+}
+
+::ng-deep .ant-form-item-label > label {
+  font-weight: 500;
+  font-size: 15px;
+  color:#228765;
+}
+
+::ng-deep .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #53A979;
+  border-color: #228765;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+::ng-deep .ant-btn-lg {
+  height: 57px;
+  border-radius: 30px;
+  padding: 15px, 73px, 15px, 73px;
+}
+.logo {
+  padding: 0 3rem;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

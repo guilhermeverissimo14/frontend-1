@@ -1,0 +1,179 @@
+<form nz-form nzLayout="vertical" [formGroup]="mainForm">
+  <div class="row">
+    <div class="col-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input
+          type="text"
+          nz-input
+          formControlName="nome"
+          (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome do paciente"
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search"></span
+      ></ng-template>
+    </div>
+
+    <div class="col-6">
+      <div class="d-flex justify-content-end">
+        <button
+          type="button"
+          nz-button
+          nzType="text"
+          (click)="handleCreate()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          <i nz-icon nzType="plus"></i>
+          Nova UBS
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row mt-4 mb-4">
+  <div class="col-lg-4 col-md-6 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="showPacientes()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-start">
+          <img class="img-fluid mx-3" src="./assets/images/pacientes.png" alt="pacientes" />
+          <span style="font-weight: 500; font-size: 16px">Pacientes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="showAnalises()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-start">
+          <img class="img-fluid mx-3" src="./assets/images/analise.png" alt="analise" />
+          <span style="font-weight: 500; font-size: 16px">Análises</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12 mb-3">
+    <div
+      class="rectangle d-flex justify-content-center"
+      (click)="showResultados()"
+    >
+      <div class="row">
+        <div class="col-12 d-flex align-items-center justify-content-end">
+          <img class="img-fluid mx-3" src="./assets/images/resultado.png" alt="resultado" />
+          <span style="font-weight: 500; font-size: 16px">Resultados</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container
+  *ngIf="shouldShowPacientes || shouldShowAnalises || shouldShowResultados"
+>
+  <form nz-form nzLayout="vertical" [formGroup]="formFilter">
+    <div class="row">
+      <div class="col-md-3 col-sm-4">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              [nzOptions]="ubs"
+              formControlName="ubs"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              nzPlaceHolder="UBS"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="col-md-3 col-sm-4">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="A-Z"
+              formControlName="ascendente"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              [nzOptions]="ascendenteOptions"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="col-md-3 col-sm-4">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="Tipo de Arbovirose"
+              formControlName="tipoArbovirose"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              [nzOptions]="tiposArbovirose"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+    <div class="mb-5">
+      <nz-table
+        #table
+        nzSize="small"
+        [nzData]="pacientes"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Cidade</th>
+            <th>Bairro</th>
+            <th>Logradouro</th>
+            <th>Número</th>
+            <th *ngIf="shouldShowAnalises">Tipo de Arbovirose</th>
+            <th *ngIf="shouldShowResultados">Resultado</th>
+            <th>Data de Criação</th>
+            <th>Hora de Criação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-paciente [ngForOf]="table.data">
+            <tr (click)="handleView(paciente)">
+              <td style="margin-right: 20px">
+                {{ paciente.id }}
+              </td>
+              <td>{{ paciente.nome }}</td>
+              <td>{{ paciente.cidade }}</td>
+              <td>{{ paciente.bairro }}</td>
+              <td>{{ paciente.logradouro }}</td>
+              <td>{{ paciente.numero }}</td>
+              <td *ngIf="shouldShowAnalises">
+                <nz-tag nzColor="success">{{
+                  getNomeArbovirose(paciente.tipoArbovirose)
+                }}</nz-tag>
+              </td>
+              <td *ngIf="shouldShowResultados">
+                <nz-tag nzColor="cyan">{{
+                  getAnalisePaciente(paciente.analisePaciente)
+                }}</nz-tag>
+              </td>
+              <td>{{ paciente.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ paciente.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00' }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-card>
+</ng-container>

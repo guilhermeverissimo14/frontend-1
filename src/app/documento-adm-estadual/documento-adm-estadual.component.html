@@ -1,0 +1,91 @@
+<form nz-form nzLayout="vertical" [formGroup]="formFilter">
+  <div class="row">
+    <div class="col-6">
+      <nz-input-group [nzPrefix]="prefixTemplateUser">
+        <input
+          type="text"
+          nz-input
+          formControlName="nomeProprietario"
+          (ngModelChange)="listByFilter()"
+          placeholder="Faça uma busca pelo nome do proprietário do documento"
+        />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser
+        ><span nz-icon nzType="search"></span
+      ></ng-template>
+    </div>
+  </div>
+</form>
+
+<form nz-form nzLayout="vertical" [formGroup]="filterForm" class="mt-5">
+  <div class="row">
+    <div class="col-md-3 col-sm-4" *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-select
+              nzPlaceHolder="Estado"
+              formControlName="estado"
+              (ngModelChange)="listByFilter()"
+              nzAllowClear
+              nzShowSearch
+              [nzOptions]="estados"
+            ></nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    <div class="col-md-3 col-sm-4">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-select
+            nzPlaceHolder="Cidade"
+            formControlName="cidade"
+            (ngModelChange)="listByFilter()"
+            nzAllowClear
+            nzShowSearch
+            >
+              <nz-option *ngFor="let cidade of cidadeOptions" [nzLabel]="cidade.label" [nzValue]="cidade.value"></nz-option></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+
+<nz-card
+  class="card-table"
+  style="border-radius: 15px; overflow: hidden;"
+>
+
+  <div class="mb-5">
+    <nz-table
+      #table
+      nzPageSize="15"
+      nzSize="small"
+      [nzData]="documentos"
+      [nzLoading]="loading"
+      [nzShowPagination]="true"
+      [nzFrontPagination]="true"
+    >
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tipo</th>
+          <th>Data de Criação</th>
+          <th>Hora de Criação</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-template ngFor let-documento [ngForOf]="table.data">
+          <tr (click)="handleView(documento)">
+            <td style="margin-right: 20px">
+              {{ documento.id }}
+            </td>
+            <td>{{ documento.tipoDeposito }}</td>
+            <td>{{ documento.dataCriacao | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ documento.horaCriacao | date: 'HH:mm:ss': 'GMT-06:00' }}</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>

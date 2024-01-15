@@ -1,0 +1,92 @@
+::ng-deep .ant-input {
+    border-radius: 30px;;
+}
+
+::ng-deep .ant-input, .ant-select-single:not(.ant-select-customize-input) .ant-select-selector, .ant-input-affix-wrapper, .ant-input-number, .ant-picker, .ant-input-group-addon {
+    border-radius: 30px;
+}
+.filtro-container {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+select,
+button {
+  margin-right: 10px;
+  padding: 8px 15px;
+  border: solid 1px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.destaque {
+  color: #95aac9;
+  font-weight: bold;
+  text-decoration: none !important;
+  background-color: #fafafa;
+
+}
+.underline-class {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+
+}
+
+.resultado-soma {
+  text-decoration: none;
+  color: #95aac9;
+  font-weight: bold;
+  pointer-events: none;
+
+}
+.ultima-linha {
+  cursor: none;
+  pointer-events: none;
+}
+
+.baixo-risco {
+  background: linear-gradient(to right, #00cc0000, #00cc0000);
+}
+
+.medio-risco {
+  background: linear-gradient(to right, #ffcc00, #ffcc0000);
+}
+
+.alto-risco {
+  background: linear-gradient(to right, #cc0000, #cc000000);
+}
+.legend-column {
+  display: inline-block;
+  vertical-align: top;
+  width: 48%;
+  margin-right: 2%;
+}
+.legend-container {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.legend-item {
+  margin-bottom: 8px;
+}
+
+.legend-key {
+  font-weight: bold;
+  color: #3366cc;
+}
+
+.legend-container {
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  border-radius: 5px;
+}
+.background-footer {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}

@@ -1,0 +1,21 @@
+.ant-tabs {
+  color: $tabs-color;
+
+  .ant-tabs-tab {
+    &.ant-tabs-tab-active {
+      > .ant-tabs-tab-btn {
+        color: $tabs-tab-active-color;
+        font-weight: normal;
+      }
+    }
+
+    &:hover {
+      color: $tabs-tab-hover-color;
+    }
+  }
+
+  .ant-tabs-nav-list > .ant-tabs-ink-bar {
+    height: 1px;
+  }
+}
+

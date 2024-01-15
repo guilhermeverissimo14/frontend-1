@@ -1,0 +1,19 @@
+image: node:14
+
+pipelines:
+  branches:
+    release:
+      - step:
+          name: Build and Deploy
+          caches:
+            - node
+          script:
+            - npm ci
+            - npm run build
+            - pipe: atlassian/aws-s3-deploy:0.3.8
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: 'sa-east-1'
+                S3_BUCKET: 'unica-painel-hml'
+                LOCAL_PATH: 'dist/unica'

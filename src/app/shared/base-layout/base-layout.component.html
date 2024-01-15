@@ -1,0 +1,215 @@
+<nz-layout class="height-100vh">
+  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [nzTrigger]="null">
+    <div class="menu-sidebar-children">
+      <div class="sidebar-logo">
+        <h2 class="text-center">
+          <img src="./assets/images/logo.png" alt="Unica Logo" />
+        </h2>
+      </div>
+      <ul nz-menu nzTheme="dark" nzMode="inline">
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_UBS'">
+          <a routerLink="/painel-ubs">
+            <span nz-icon nzType="home"></span>
+            <span>Início</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_GERAL'">
+          <a routerLink="/painel-adm-geral">
+            <span nz-icon nzType="home"></span>
+            <span>Usuários</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/painel-adm-municipal">
+            <span nz-icon nzType="home"></span>
+            <span>Início</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL'">
+          <a routerLink="/painel-adm-estadual">
+            <span nz-icon nzType="home"></span>
+            <span>Início</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+          <a routerLink="/painel-adm-nacional">
+            <span nz-icon nzType="home"></span>
+            <span>Início</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/agentes-endemias">
+            <span nz-icon nzType="team"></span>
+            <span>Agentes de Endemias</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL'">
+          <a routerLink="/agentes-endemias-adm-estadual">
+            <span nz-icon nzType="team"></span>
+            <span>Agentes de Endemias</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+          <a routerLink="/agentes-endemias-adm-nacional">
+            <span nz-icon nzType="team"></span>
+            <span>Agentes de Endemias</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/ubs-municipal">
+            <span nz-icon nzType="medicine-box"></span>
+            <span>UBS</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_PROFISSIONAL_UBS'">
+          <a routerLink="/painel-profissional-ubs">
+            <span nz-icon nzType="medicine-box"></span>
+            <span>UBS</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL'">
+          <a routerLink="/ubs-estadual">
+            <span nz-icon nzType="medicine-box"></span>
+            <span>UBS</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+          <a routerLink="/pacientes-adm-nacional">
+            <span nz-icon nzType="medicine-box"></span>
+            <span>UBS</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/documentos">
+            <span nz-icon nzType="diff"></span>
+            <span>Documentos</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL'">
+          <a routerLink="/documentos-adm-estadual">
+            <span nz-icon nzType="diff"></span>
+            <span>Documentos</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+          <a routerLink="/documentos-adm-nacional">
+            <span nz-icon nzType="diff"></span>
+            <span>Documentos</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/indice-pendencia">
+            <span nz-icon nzType="exclamation-circle"></span>
+            <span>Índice de Pendência</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/consumo-larvicidas">
+            <span nz-icon nzType="exclamation-circle"></span>
+            <span>Consumo Larvicidas</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL'">
+          <a routerLink="/usuario">
+            <span nz-icon nzType="user"></span>
+            <span>Usuários</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL'">
+          <a routerLink="/usuarios-adm-estadual">
+            <span nz-icon nzType="user"></span>
+            <span>Usuários</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter *ngIf="currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'">
+          <a routerLink="/usuarios-adm-nacional">
+            <span nz-icon nzType="user"></span>
+            <span>Usuários</span>
+          </a>
+        </li>
+
+        <!--
+        <li
+          nz-menu-item
+          nzMatchRouter
+          *ngIf="
+            currentUserRole == 'ROLE_ADMINISTRADOR_MUNICIPAL' ||
+            currentUserRole == 'ROLE_ADMINISTRADOR_ESTADUAL' ||
+            currentUserRole == 'ROLE_ADMINISTRADOR_NACIONAL'
+          "
+        >
+          <a routerLink="/relatorio-semanal">
+            <span nz-icon nzType="diff"></span>
+            <span>Relatório Semanal</span>
+          </a>
+        </li> -->
+
+        <!-- <li nz-menu-item nzMatchRouter>
+          <a>
+            <span nz-icon nzType="sync"></span>
+            <span>Sincronizar</span>
+          </a>
+        </li> -->
+
+        <!-- <li nz-menu-item nzMatchRouter>
+          <a routerLink="/agentes-endemias">
+            <span nz-icon nzType="team"></span>
+            <span>Agentes de Endemias</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/ubs">
+            <span nz-icon nzType="plus"></span>
+            <span>Unidades Básicas de Saúde</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/documentos">
+            <span nz-icon nzType="diff"></span>
+            <span>Documentos</span>
+          </a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/usuario">
+            <span nz-icon nzType="user"></span>
+            <span>Usuário</span>
+          </a>
+        </li>-->
+
+        <li nz-menu-item nzMatchRouter>
+          <a (click)="logout()">
+            <span nz-icon nzType="logout"></span>
+            <span>Sair</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nz-sider>
+  <nz-layout>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

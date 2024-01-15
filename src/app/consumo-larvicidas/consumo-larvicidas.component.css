@@ -1,0 +1,20 @@
+filtro-container {
+  margin-top: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button,
+select {
+  margin-right: 10px;
+  padding: 4px 15px;
+  border: solid 1px;
+  border-radius: 30px;
+  cursor: pointer;
+}

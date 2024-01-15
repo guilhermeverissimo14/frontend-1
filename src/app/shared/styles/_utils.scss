@@ -1,0 +1,15 @@
+.hide-empty:empty {
+  display: none;
+}
+
+.spacing-between {
+  > * ~ * {
+    margin-left: .5rem;
+  }
+}
+
+.break-word {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}

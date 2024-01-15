@@ -1,0 +1,10 @@
+.btn-unicasu-primary {
+    background-color: #228765;
+    color: #ffffff;
+}
+
+::ng-deep .ant-btn-lg {
+  height: 50px;
+  border-radius: 30px;
+  padding: 15px, 73px, 15px, 73px;
+}

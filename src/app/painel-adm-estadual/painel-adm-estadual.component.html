@@ -1,0 +1,361 @@
+<form nz-form nzLayout="vertical" [formGroup]="form">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="d-flex justify-content-end">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-date-picker
+              formControlName="data"
+              nzFormat="dd/MM/yyyy"
+              [nzDisabledDate]="disabledDate"
+            >
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <button
+          nz-button
+          nzBlock
+          type="button"
+          [nzLoading]="downloading"
+          class="ml-2 w-25"
+          (click)="handleDownload()"
+          style="background-color: #228765; color: white; border-radius: 30px"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row" #container>
+  <div class="col-md-12 col-lg-12">
+    <nz-divider nzText="Mapa Estadual"></nz-divider>
+
+    <div #map style="height: 400px"></div>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Notificações das Cidades"></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        #table
+        nzSize="small"
+        [nzData]="relatorios"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Métrica Analisada</th>
+            <th>Risco Transmissão</th>
+            <th>Índice de Infestação Predial (IIP)</th>
+            <th>Índice de Breteau (IB)</th>
+            <th>Notificados</th>
+            <th>Casos positivos</th>
+            <th>Casos suspeitos</th>
+            <th>Internados</th>
+            <th>Óbitos</th>
+            <th>Óbitos suspeitos</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-relatorio [ngForOf]="table.data">
+            <tr>
+              <td style="margin-right: 20px">
+                {{ relatorio.id }}
+              </td>
+              <td>Resultado/valor</td>
+              <td>
+                {{ getRiscoTransmissaoLabel(relatorio.riscoTransmissao) }}
+              </td>
+              <td>
+                {{
+                  getIndiceInfestacaoLabel(relatorio.indiceInfestacaoPredial)
+                }}
+              </td>
+              <td>{{ relatorio.indiceBreteau }}</td>
+              <td>{{ relatorio.notificados }}</td>
+              <td>{{ relatorio.casosPositivos }}</td>
+              <td>{{ relatorio.casosSuspeitos }}</td>
+              <td>{{ relatorio.internados }}</td>
+              <td>{{ relatorio.obitos }}</td>
+              <td>{{ relatorio.obitosSuspeitos }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Classificação dos Setores (Risco de Transmissão de Dengue, Zika e Chikungunya)"
+    ></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzLoading]="loading"
+        [nzData]="['']"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 40%">Risco</th>
+            <th>Nº Setores</th>
+            <th>%</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <nz-tag nzColor="success">Baixo risco (menor que 0,9)</nz-tag>
+            </td>
+            <td>{{ baixoRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(baixoRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(baixoRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="gold">Médio risco (entre 1,0 e 3,9)</nz-tag>
+            </td>
+            <td>{{ medioRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(medioRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(medioRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="red">Alto risco (acima de 3,9)</nz-tag>
+            </td>
+            <td>{{ altoRiscoOptions?.setores }}</td>
+            <td>{{ isValorNaN(altoRiscoOptions?.porcentagem) ? '-' : getFormattedNumber(altoRiscoOptions?.porcentagem) + "%" }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Total</nz-tag>
+            </td>
+            <td>{{ relatorios?.length }}</td>
+            <td>100%</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Situação dos Setores - Índice de Infestação Predial (IIP)"
+    ></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzData]="relatorios"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 40%">Risco</th>
+            <th>Região</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-relatorio [ngForOf]="table.data">
+            <tr>
+              <td>
+                <nz-tag
+                  nzColor="success"
+                  *ngIf="relatorio.riscoTransmissao == 'BAIXO'"
+                  >Baixo risco (menor que 0,9)</nz-tag
+                >
+                <nz-tag
+                  nzColor="gold"
+                  *ngIf="relatorio.riscoTransmissao == 'MEDIO'"
+                  >Médio risco (entre 1,0 e 3,9)</nz-tag
+                >
+                <nz-tag
+                  nzColor="red"
+                  *ngIf="relatorio.riscoTransmissao == 'ALTO'"
+                  >Alto risco (acima de 3,9)</nz-tag
+                >
+              </td>
+              <td>{{ getRegiaoLabel(relatorio.usuario?.regiaoGeografica) }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider
+      nzText="Número de Depósitos Inspecionados (Tipos de Depósitos)"
+    ></nz-divider>
+    <nz-card
+      class="card-table d-flex justify-content-center"
+      style="border-radius: 15px; overflow: hidden"
+    >
+      <br />
+      <ngx-charts-bar-vertical
+        *ngIf="graphVisible"
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+      >
+      </ngx-charts-bar-vertical>
+
+      <nz-divider></nz-divider>
+
+      <h4>
+        A1 - Armazenamento de Água (Elevado);<br />
+        A2 - Armazenamento de Água (Nível do Solo);<br />B - Pequenos
+        recipientes móveis; <br />C - Recipientes fixos; <br />D1 - Pneus;
+        <br />D2 - Lixo e Sucata; <br />E - Recipientes naturais
+      </h4>
+    </nz-card>
+  </div>
+
+  <div class="col-md-12 col-lg-12 mt-4">
+    <nz-divider nzText="Porcentagem de Depósitos Inspecionados"></nz-divider>
+    <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
+      <nz-table
+        nzSize="small"
+        [nzData]="['']"
+        [nzLoading]="loading"
+        [nzShowPagination]="true"
+        [nzFrontPagination]="true"
+      >
+        <thead>
+          <tr>
+            <th style="width: 20%">Gersa</th>
+            <th>A1</th>
+            <th>A2</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D1</th>
+            <th>D2</th>
+            <th>E</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Zona Sul</nz-tag>
+            </td>
+            <td>{{ documentosZonaSul.columnOne }}</td>
+            <td>{{ documentosZonaSul.columnTwo }}</td>
+            <td>{{ documentosZonaSul.columnThree }}</td>
+            <td>{{ documentosZonaSul.columnFour }}</td>
+            <td>{{ documentosZonaSul.columnFive }}</td>
+            <td>{{ documentosZonaSul.columnSix }}</td>
+            <td>{{ documentosZonaSul.columnSeven }}</td>
+            <td>{{ documentosZonaSul.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Zona Norte</nz-tag>
+            </td>
+            <td>{{ documentosZonaNorte.columnOne }}</td>
+            <td>{{ documentosZonaNorte.columnTwo }}</td>
+            <td>{{ documentosZonaNorte.columnThree }}</td>
+            <td>{{ documentosZonaNorte.columnFour }}</td>
+            <td>{{ documentosZonaNorte.columnFive }}</td>
+            <td>{{ documentosZonaNorte.columnSix }}</td>
+            <td>{{ documentosZonaNorte.columnSeven }}</td>
+            <td>{{ documentosZonaNorte.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Zona Leste</nz-tag>
+            </td>
+            <td>{{ documentosZonaLeste.columnOne }}</td>
+            <td>{{ documentosZonaLeste.columnTwo }}</td>
+            <td>{{ documentosZonaLeste.columnThree }}</td>
+            <td>{{ documentosZonaLeste.columnFour }}</td>
+            <td>{{ documentosZonaLeste.columnFive }}</td>
+            <td>{{ documentosZonaLeste.columnSix }}</td>
+            <td>{{ documentosZonaLeste.columnSeven }}</td>
+            <td>{{ documentosZonaLeste.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Zona Oeste</nz-tag>
+            </td>
+            <td>{{ documentosZonaOeste.columnOne }}</td>
+            <td>{{ documentosZonaOeste.columnTwo }}</td>
+            <td>{{ documentosZonaOeste.columnThree }}</td>
+            <td>{{ documentosZonaOeste.columnFour }}</td>
+            <td>{{ documentosZonaOeste.columnFive }}</td>
+            <td>{{ documentosZonaOeste.columnSix }}</td>
+            <td>{{ documentosZonaOeste.columnSeven }}</td>
+            <td>{{ documentosZonaOeste.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Centro</nz-tag>
+            </td>
+            <td>{{ documentosCentro.columnOne }}</td>
+            <td>{{ documentosCentro.columnTwo }}</td>
+            <td>{{ documentosCentro.columnThree }}</td>
+            <td>{{ documentosCentro.columnFour }}</td>
+            <td>{{ documentosCentro.columnFive }}</td>
+            <td>{{ documentosCentro.columnSix }}</td>
+            <td>{{ documentosCentro.columnSeven }}</td>
+            <td>{{ documentosCentro.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Bairro</nz-tag>
+            </td>
+            <td>{{ documentosBairro.columnOne }}</td>
+            <td>{{ documentosBairro.columnTwo }}</td>
+            <td>{{ documentosBairro.columnThree }}</td>
+            <td>{{ documentosBairro.columnFour }}</td>
+            <td>{{ documentosBairro.columnFive }}</td>
+            <td>{{ documentosBairro.columnSix }}</td>
+            <td>{{ documentosBairro.columnSeven }}</td>
+            <td>{{ documentosBairro.total }}</td>
+          </tr>
+
+          <tr>
+            <td>
+              <nz-tag nzColor="cyan">Total</nz-tag>
+            </td>
+            <td>{{ totalPorcentagemDepositosInspecionados.a1 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.a2 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.b }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.c }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.d1 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.d2 }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.e }}</td>
+            <td>{{ totalPorcentagemDepositosInspecionados.total }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</div>
