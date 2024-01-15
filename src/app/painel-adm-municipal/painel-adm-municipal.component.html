@@ -1,26 +1,16 @@
-<form nz-form nzLayout="vertical" >
+<form nz-form nzLayout="vertical">
   <div class="row">
     <div class="col-md-12 col-lg-12">
       <div class="d-flex justify-content-end">
         <nz-form-item>
           <nz-form-control>
-            <nz-date-picker
-              nzFormat="dd/MM/yyyy"
-              [nzDisabledDate]="disabledDate"
-            >
+            <nz-date-picker nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledDate">
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
 
-        <button
-          nz-button
-          nzBlock
-          type="button"
-          [nzLoading]="downloading"
-          class="ml-2 w-25"
-          (click)="handleDownload()"
-          style="background-color: #228765; color: white; border-radius: 30px"
-        >
+        <button nz-button nzBlock type="button" [nzLoading]="downloading" class="ml-2 w-25" (click)="handleDownload()"
+          style="background-color: #228765; color: white; border-radius: 30px">
           Download
         </button>
       </div>
@@ -37,10 +27,7 @@
   <select id="filtroAno" [(ngModel)]="anoSelecionado">
     <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
   </select>
-  <button
-    style="background-color: #228765; color: white; border-radius: 30px"
-    (click)="refreshDocument()"
-  >
+  <button style="background-color: #228765; color: white; border-radius: 30px" (click)="refreshDocument()">
     Aplicar Filtro
   </button>
 </div>
@@ -54,14 +41,8 @@
   <div class="col-md-12 col-lg-12 mt-4">
     <nz-divider nzText="Notificações da Cidade"></nz-divider>
     <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
-      <nz-table
-        #table
-        nzSize="small"
-        [nzData]="dadosPacientes"
-        [nzLoading]="loading"
-        [nzShowPagination]="true"
-        [nzFrontPagination]="true"
-      >
+      <nz-table #table nzSize="small" [nzData]="dadosPacientes" [nzLoading]="loading" [nzShowPagination]="true"
+        [nzFrontPagination]="true">
         <thead>
           <tr>
             <th style="width: 20%">UBS</th>
@@ -76,13 +57,17 @@
         </thead>
 
         <tbody>
-          <tr
-          *ngFor="let relatorio of dadosPacientes"
-          [class]="getPatientColorClass(relatorio.somaCasosPositivos / relatorio.notificados * 100)"
-          >
+          <tr *ngFor="let relatorio of dadosPacientes"
+            [class]="getPatientColorClass(relatorio.somaCasosPositivos / relatorio.notificados * 100)">
             <td>{{ relatorio.ubsNome }}</td>
             <td>{{ relatorio.notificados }}</td>
-            <td>{{ relatorio.somaCasosPositivos }}</td>
+            <td style="cursor: pointer;"
+               nz-popover
+              [nzPopoverTitle]="'Tipos de Arbovirose'"
+              [nzPopoverContent]="getPopoverContent(relatorio.tipoArboviroseCount)"
+              nzType="vertical">
+              {{ relatorio.somaCasosPositivos }}
+            </td>
             <td>{{ relatorio.somaCasosEstrangeiros }}</td>
             <td>{{ relatorio.somaCasosSuspeitos }}</td>
             <td>{{ relatorio.internados }}</td>
@@ -161,28 +146,13 @@
   </div> -->
 
   <div class="col-md-12 col-lg-12 mt-4">
-    <nz-divider
-      nzText="Número de Depósitos Inspecionados (Tipos de Depósitos)"
-    ></nz-divider>
-    <nz-card
-      class="card-table d-flex justify-content-center"
-      style="border-radius: 15px; overflow: hidden"
-    >
+    <nz-divider nzText="Número de Depósitos Inspecionados (Tipos de Depósitos)"></nz-divider>
+    <nz-card class="card-table d-flex justify-content-center" style="border-radius: 15px; overflow: hidden">
       <br />
-      <ngx-charts-bar-vertical
-        *ngIf="graphVisible"
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="single"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-      >
+      <ngx-charts-bar-vertical *ngIf="graphVisible" [view]="view" [scheme]="colorScheme" [results]="single"
+        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel">
       </ngx-charts-bar-vertical>
 
       <div class="legend-column legend-container">
@@ -246,13 +216,7 @@
     <nz-divider nzText="Porcentagem de Depósitos Inspecionados"></nz-divider>
 
     <nz-card class="card-table" style="border-radius: 15px; overflow: hidden">
-      <nz-table
-      #table
-      nzSize="small"
-      [nzData]="indiceDocumentos"
-      [nzShowPagination]="true"
-      [nzFrontPagination]="true"
-      >
+      <nz-table #table nzSize="small" [nzData]="indiceDocumentos" [nzShowPagination]="true" [nzFrontPagination]="true">
         <thead>
           <tr>
             <th style="width: 5%">Zona</th>

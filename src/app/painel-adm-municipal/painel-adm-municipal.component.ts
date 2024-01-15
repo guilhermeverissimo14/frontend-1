@@ -171,6 +171,20 @@ export class PainelAdmMunicipalComponent extends OnDestroyMixin implements OnIni
     );
   }
 
+  getPopoverContent(tipoArboviroseCount: any): string {
+    let content = '';
+
+    for (const tipo in tipoArboviroseCount) {
+      if (tipoArboviroseCount.hasOwnProperty(tipo)) {
+        content += `${tipo}: ${tipoArboviroseCount[tipo]}\n`;
+      }
+    }
+
+    const columns = content.split('\n');
+
+    return columns.join(', ');
+  }
+
   getIfpColorClass(ifpValue: number): string {
     if (ifpValue < 30) {
       return 'baixo-risco';
